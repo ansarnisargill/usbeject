@@ -14,6 +14,7 @@ I'm distributing this software with NO WARRANTY and NO GUARANTEE of suitability 
 
 Usage example pulled from my code:
 
+```csharp
 VolumeDeviceClass volumes = new VolumeDeviceClass();
 foreach (Volume vol in volumes.Devices)
 {
@@ -25,3 +26,4 @@ foreach (Volume vol in volumes.Devices)
     break;
   }
 }
+```
