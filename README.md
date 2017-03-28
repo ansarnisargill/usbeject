@@ -15,15 +15,17 @@ I'm distributing this software with NO WARRANTY and NO GUARANTEE of suitability 
 Usage example pulled from my code:
 
 ```csharp
-VolumeDeviceClass volumes = new VolumeDeviceClass();
-foreach (Volume vol in volumes.Devices)
+using (VolumeDeviceClass volumes = new VolumeDeviceClass())
 {
-  if (eject_drive.Equals(vol.LogicalDrive))
+  foreach (Volume vol in volumes.Devices)
   {
-    eventLog.WriteEntry("Attempting to eject drive: " + cur_write_drive);
-    vol.Eject(false);
-    eventLog.WriteEntry("Done ejecting drive.");
-    break;
+    if (eject_drive.Equals(vol.LogicalDrive))
+    {
+      eventLog.WriteEntry("Attempting to eject drive: " + cur_write_drive);
+      vol.Eject(false);
+      eventLog.WriteEntry("Done ejecting drive.");
+      break;
+    }
   }
 }
 ```
