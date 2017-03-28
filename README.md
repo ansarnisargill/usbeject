@@ -18,7 +18,7 @@ Usage example pulled from my code:
 VolumeDeviceClass volumes = new VolumeDeviceClass();
 foreach (Volume vol in volumes.Devices)
 {
-  if (vol.LogicalDrive.Equals(eject_drive))
+  if (eject_drive.Equals(vol.LogicalDrive))
   {
     eventLog.WriteEntry("Attempting to eject drive: " + cur_write_drive);
     vol.Eject(false);
