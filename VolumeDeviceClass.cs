@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace UsbEject.Library
@@ -26,7 +27,7 @@ namespace UsbEject.Library
                 if (Native.GetVolumeNameForVolumeMountPoint(drive, sb, sb.Capacity))
                 {
                     _logicalDrives[sb.ToString()] = drive.Replace("\\", "");
-                    Console.WriteLine(drive + " ==> " + sb.ToString());
+                    Debug.WriteLine(drive + " ==> " + sb.ToString());
                 }
             }
         }
