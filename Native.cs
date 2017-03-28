@@ -7,7 +7,7 @@ using System.Text;
 
 namespace UsbEject.Library
 {
-	internal sealed class Native
+	internal static class Native
 	{
         // from winuser.h
         internal const int WM_DEVICECHANGE = 0x0219;
@@ -194,10 +194,5 @@ namespace UsbEject.Library
         [DllImport("setupapi.dll")]
 		internal static extern uint SetupDiDestroyDeviceInfoList(
 			IntPtr deviceInfoSet);
-
-
-        private Native()
-		{
-		}
 	}
 }
