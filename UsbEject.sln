@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "UsbEject", "UsbEject\UsbEject.shproj", "{C2246CDE-CA85-42F5-A139-BE4ED68DF978}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net45", "Net45\Net45.csproj", "{BA1DCACB-99B3-49DB-9A06-A641205D25E6}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "UsbEject", "UsbEject\UsbEject.shproj", "{C2246CDE-CA85-42F5-A139-BE4ED68DF978}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net20", "Net20\Net20.csproj", "{430DF142-BE3C-4167-A10E-CD488AFF1FE8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,6 +19,10 @@ Global
 		{BA1DCACB-99B3-49DB-9A06-A641205D25E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA1DCACB-99B3-49DB-9A06-A641205D25E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA1DCACB-99B3-49DB-9A06-A641205D25E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{430DF142-BE3C-4167-A10E-CD488AFF1FE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{430DF142-BE3C-4167-A10E-CD488AFF1FE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{430DF142-BE3C-4167-A10E-CD488AFF1FE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{430DF142-BE3C-4167-A10E-CD488AFF1FE8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
