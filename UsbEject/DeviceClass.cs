@@ -129,12 +129,12 @@ namespace UsbEject.Library
                             {
                                 if (!Native.DeviceIoControl(hFile, Native.IOCTL_STORAGE_GET_DEVICE_NUMBER, IntPtr.Zero, 0, numBuffer, numBufSize, out bytesReturned, IntPtr.Zero))
                                 {
-                                    Debug.WriteLine("IOCTL failed.");
+                                    Trace.WriteLine("IOCTL failed.");
                                 }
                             }
                             catch (Exception ex)
                             {
-                                Debug.WriteLine("Exception calling ioctl: " + ex);
+                                Trace.WriteLine("Exception calling ioctl: " + ex);
                             }
                             finally
                             {

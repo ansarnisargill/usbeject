@@ -27,7 +27,7 @@ namespace UsbEject.Library
                 if (Native.GetVolumeNameForVolumeMountPoint(drive, sb, sb.Capacity))
                 {
                     _logicalDrives[sb.ToString()] = drive.Replace("\\", "");
-                    Debug.WriteLine(drive + " ==> " + sb.ToString());
+                    Trace.WriteLine(drive + " ==> " + sb.ToString());
                 }
             }
         }
