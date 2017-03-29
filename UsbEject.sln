@@ -9,8 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net45", "Net45\Net45.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net20", "Net20\Net20.csproj", "{430DF142-BE3C-4167-A10E-CD488AFF1FE8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net35", "Net35\Net35.csproj", "{03345201-6908-4FDE-9867-A20F8A461A7F}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		UsbEject\UsbEject.projitems*{03345201-6908-4fde-9867-a20f8a461a7f}*SharedItemsImports = 4
 		UsbEject\UsbEject.projitems*{430df142-be3c-4167-a10e-cd488aff1fe8}*SharedItemsImports = 4
 		UsbEject\UsbEject.projitems*{ba1dcacb-99b3-49db-9a06-a641205d25e6}*SharedItemsImports = 4
 	EndGlobalSection
@@ -27,6 +30,10 @@ Global
 		{430DF142-BE3C-4167-A10E-CD488AFF1FE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{430DF142-BE3C-4167-A10E-CD488AFF1FE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{430DF142-BE3C-4167-A10E-CD488AFF1FE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03345201-6908-4FDE-9867-A20F8A461A7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03345201-6908-4FDE-9867-A20F8A461A7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03345201-6908-4FDE-9867-A20F8A461A7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03345201-6908-4FDE-9867-A20F8A461A7F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
