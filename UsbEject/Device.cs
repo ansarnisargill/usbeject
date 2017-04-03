@@ -14,17 +14,6 @@ namespace UsbEject.Library
     [TypeConverter(typeof(ExpandableObjectConverter))]
     public class Device : IComparable
     {
-        private string _path;
-        private DeviceClass _deviceClass;
-        private string _description;
-        private string _class;
-        private string _classGuid;
-        private int _disknum;
-        private Device _parent;
-        private int _index;
-        private DeviceCapabilities _capabilities = DeviceCapabilities.Unknown;
-        private List<Device> _removableDevices;
-        private string _friendlyName;
         private Native.SP_DEVINFO_DATA _deviceInfoData;
 
         internal Device(DeviceClass deviceClass, Native.SP_DEVINFO_DATA deviceInfoData, string path, int index, int disknum = -1)
@@ -39,8 +28,10 @@ namespace UsbEject.Library
             _path = path; // may be null
             _deviceInfoData = deviceInfoData;
             _index = index;
-            _disknum = disknum;
+            _diskNumber = disknum;
         }
+
+        private readonly int _index;
 
         /// <summary>
         /// Gets the device's index.
@@ -52,6 +43,8 @@ namespace UsbEject.Library
                 return _index;
             }
         }
+
+        private readonly DeviceClass _deviceClass;
 
         /// <summary>
         /// Gets the device's class instance.
@@ -65,6 +58,8 @@ namespace UsbEject.Library
             }
         }
 
+        private readonly string _path;
+
         /// <summary>
         /// Gets the device's path.
         /// </summary>
@@ -72,18 +67,20 @@ namespace UsbEject.Library
         {
             get
             {
-                if (_path == null)
-                {
-                }
                 return _path;
             }
         }
 
+        private readonly int _diskNumber;
+
+        /// <summary>
+        /// Gets the device's disk number.
+        /// </summary>
         public int DiskNumber
         {
             get
             {
-                return _disknum;
+                return _diskNumber;
             }
         }
 
@@ -98,6 +95,8 @@ namespace UsbEject.Library
             }
         }
 
+        private string _class;
+
         /// <summary>
         /// Gets the device's class name.
         /// </summary>
@@ -107,11 +106,18 @@ namespace UsbEject.Library
             {
                 if (_class == null)
                 {
-                    _class = _deviceClass.GetProperty(_deviceInfoData, Native.SPDRP_CLASS, null);
+                    _class = GetClass();
                 }
                 return _class;
             }
         }
+
+        private string GetClass()
+        {
+            return _deviceClass.GetProperty(_deviceInfoData, Native.SPDRP_CLASS, null);
+        }
+
+        private string _classGuid;
 
         /// <summary>
         /// Gets the device's class Guid as a string.
@@ -122,11 +128,18 @@ namespace UsbEject.Library
             {
                 if (_classGuid == null)
                 {
-                    _classGuid = _deviceClass.GetProperty(_deviceInfoData, Native.SPDRP_CLASSGUID, null);
+                    _classGuid = GetClassGuid();
                 }
                 return _classGuid;
             }
         }
+
+        private string GetClassGuid()
+        {
+            return _deviceClass.GetProperty(_deviceInfoData, Native.SPDRP_CLASSGUID, null);
+        }
+
+        private string _description;
 
         /// <summary>
         /// Gets the device's description.
@@ -137,11 +150,18 @@ namespace UsbEject.Library
             {
                 if (_description == null)
                 {
-                    _description = _deviceClass.GetProperty(_deviceInfoData, Native.SPDRP_DEVICEDESC, null);
+                    _description = GetDescription();
                 }
                 return _description;
             }
         }
+
+        private string GetDescription()
+        {
+            return _deviceClass.GetProperty(_deviceInfoData, Native.SPDRP_DEVICEDESC, null);
+        }
+
+        private string _friendlyName;
 
         /// <summary>
         /// Gets the device's friendly name.
@@ -152,11 +172,18 @@ namespace UsbEject.Library
             {
                 if (_friendlyName == null)
                 {
-                    _friendlyName = _deviceClass.GetProperty(_deviceInfoData, Native.SPDRP_FRIENDLYNAME, null);
+                    _friendlyName = GetFriendlyName();
                 }
                 return _friendlyName;
             }
         }
+
+        private string GetFriendlyName()
+        {
+            return _deviceClass.GetProperty(_deviceInfoData, Native.SPDRP_FRIENDLYNAME, null);
+        }
+
+        private DeviceCapabilities? _capabilities;
 
         /// <summary>
         /// Gets the device's capabilities.
@@ -165,30 +192,48 @@ namespace UsbEject.Library
         {
             get
             {
-                if (_capabilities == DeviceCapabilities.Unknown)
+                if (_capabilities == null)
                 {
-                    _capabilities = (DeviceCapabilities)_deviceClass.GetProperty(_deviceInfoData, Native.SPDRP_CAPABILITIES, 0);
+                    _capabilities = GetCapabilities();
                 }
-                return _capabilities;
+                return _capabilities.Value;
             }
         }
+
+        private DeviceCapabilities GetCapabilities()
+        {
+            return (DeviceCapabilities)_deviceClass.GetProperty(_deviceInfoData, Native.SPDRP_CAPABILITIES, 0);
+        }
+
+        private bool? _isUsb;
 
         /// <summary>
         /// Gets a value indicating whether this device is a USB device.
         /// </summary>
-        public virtual bool IsUsb
+        public bool IsUsb
         {
             get
             {
-                if (Class == "USB")
-                    return true;
-
-                if (Parent == null)
-                    return false;
-
-                return Parent.IsUsb;
+                if (_isUsb == null)
+                {
+                    _isUsb = GetIsUsb();
+                }
+                return _isUsb.Value;
             }
         }
+
+        protected virtual bool GetIsUsb()
+        {
+            if (Class == "USB")
+                return true;
+
+            if (Parent == null)
+                return false;
+
+            return Parent.IsUsb;
+        }
+
+        private Device _parent;
 
         /// <summary>
         /// Gets the device's parent device or null if this device has not parent.
@@ -199,46 +244,56 @@ namespace UsbEject.Library
             {
                 if (_parent == null)
                 {
-                    int parentDevInst = 0;
-                    int hr = Native.CM_Get_Parent(ref parentDevInst, _deviceInfoData.devInst, 0);
-                    if (hr == 0)
-                    {
-                        _parent = new Device(_deviceClass, _deviceClass.GetInfo(parentDevInst), null, -1);
-                    }
+                    _parent = GetParent();
                 }
                 return _parent;
             }
         }
 
+        private Device GetParent()
+        {
+            int parentDevInst = 0;
+            int hr = Native.CM_Get_Parent(ref parentDevInst, _deviceInfoData.devInst, 0);
+            if (hr == 0)
+            {
+                return new Device(_deviceClass, _deviceClass.GetInfo(parentDevInst), null, -1);
+            }
+
+            return null;
+        }
+
+        private List<Device> _removableDevices;
+
         /// <summary>
         /// Gets this device's list of removable devices.
         /// Removable devices are parent devices that can be removed.
         /// </summary>
-        public virtual List<Device> RemovableDevices
+        public List<Device> RemovableDevices
         {
             get
             {
                 if (_removableDevices == null)
                 {
-                    _removableDevices = new List<Device>();
-
-                    if ((Capabilities & DeviceCapabilities.Removable) != 0)
-                    {
-                        _removableDevices.Add(this);
-                    }
-                    else
-                    {
-                        if (Parent != null)
-                        {
-                            foreach (Device device in Parent.RemovableDevices)
-                            {
-                                _removableDevices.Add(device);
-                            }
-                        }
-                    }
+                    _removableDevices = GetRemovableDevices();
                 }
                 return _removableDevices;
             }
+        }
+
+        protected virtual List<Device> GetRemovableDevices()
+        {
+            List<Device> removableDevices = new List<Device>();
+
+            if ((Capabilities & DeviceCapabilities.Removable) != 0)
+            {
+                removableDevices.Add(this);
+            }
+            else if (Parent != null)
+            {
+                removableDevices.AddRange(Parent.RemovableDevices);
+            }
+
+            return removableDevices;
         }
 
         /// <summary>

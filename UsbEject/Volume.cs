@@ -15,16 +15,12 @@ namespace UsbEject.Library
     /// </summary>
     public class Volume : Device, IComparable
     {
-        private string _volumeName;
-        private string _logicalDrive;
-        private int[] _diskNumbers;
-        private List<Device> _disks;
-        private List<Device> _removableDevices;
-
         internal Volume(DeviceClass deviceClass, Native.SP_DEVINFO_DATA deviceInfoData, string path, int index)
             : base(deviceClass, deviceInfoData, path, index)
         {
         }
+
+        private string _volumeName;
 
         /// <summary>
         /// Gets the volume's name.
@@ -35,21 +31,29 @@ namespace UsbEject.Library
             {
                 if (_volumeName == null)
                 {
-                    StringBuilder sb = new StringBuilder(1024);
-                    if (!Native.GetVolumeNameForVolumeMountPoint(Path + "\\", sb, sb.Capacity))
-                    {
-                        // throw new Win32Exception(Marshal.GetLastWin32Error());
-
-                    }
-
-                    if (sb.Length > 0)
-                    {
-                        _volumeName = sb.ToString();
-                    }
+                    _volumeName = GetVolumeName();
                 }
                 return _volumeName;
             }
         }
+
+        private string GetVolumeName()
+        {
+            StringBuilder sb = new StringBuilder(1024);
+            if (!Native.GetVolumeNameForVolumeMountPoint(Path + "\\", sb, sb.Capacity))
+            {
+                // throw new Win32Exception(Marshal.GetLastWin32Error());
+            }
+
+            if (sb.Length > 0)
+            {
+                return sb.ToString();
+            }
+
+            return null;
+        }
+
+        private string _logicalDrive;
 
         /// <summary>
         /// Gets the volume's logical drive in the form [letter]:\
@@ -58,32 +62,40 @@ namespace UsbEject.Library
         {
             get
             {
-                if ((_logicalDrive == null) && (VolumeName != null))
+                if (_logicalDrive == null)
                 {
-                    ((VolumeDeviceClass)DeviceClass)._logicalDrives.TryGetValue(VolumeName, out _logicalDrive);
+                    _logicalDrive = GetLogicalDrive();
                 }
                 return _logicalDrive;
             }
         }
 
-        /// <summary>
-        /// Gets a value indicating whether this volume is a based on USB devices.
-        /// </summary>
-        public override bool IsUsb
+        private string GetLogicalDrive()
         {
-            get
+            if (VolumeName != null)
             {
-                if (Disks != null)
-                {
-                    foreach (Device disk in Disks)
-                    {
-                        if (disk.IsUsb)
-                            return true;
-                    }
-                }
-                return false;
+                string logicalDrive;
+                ((VolumeDeviceClass)DeviceClass)._logicalDrives.TryGetValue(VolumeName, out logicalDrive);
+                return logicalDrive;
             }
+
+            return null;
         }
+
+        protected override bool GetIsUsb()
+        {
+            if (Disks != null)
+            {
+                foreach (Device disk in Disks)
+                {
+                    if (disk.IsUsb)
+                        return true;
+                }
+            }
+            return false;
+        }
+
+        private List<Device> _disks;
 
         /// <summary>
         /// Gets a list of underlying disks for this volume.
@@ -94,26 +106,35 @@ namespace UsbEject.Library
             {
                 if (_disks == null)
                 {
-                    _disks = new List<Device>();
-
-                    if (DiskNumbers != null)
-                    {
-                        DiskDeviceClass disks = new DiskDeviceClass();
-                        foreach (int index in DiskNumbers)
-                        {
-                            foreach (Device disk in disks.Devices)
-                            {
-                                if (disk.DiskNumber == index)
-                                {
-                                    _disks.Add(disk);
-                                }
-                            }
-                        }
-                    }
+                    _disks = GetDisks();
                 }
                 return _disks;
             }
         }
+
+        private List<Device> GetDisks()
+        {
+            List<Device> disks = new List<Device>();
+
+            if (DiskNumbers != null)
+            {
+                DiskDeviceClass diskClass = new DiskDeviceClass();
+                foreach (int index in DiskNumbers)
+                {
+                    foreach (Device disk in diskClass.Devices)
+                    {
+                        if (disk.DiskNumber == index)
+                        {
+                            disks.Add(disk);
+                        }
+                    }
+                }
+            }
+
+            return disks;
+        }
+
+        private int[] _diskNumbers;
 
         public int[] DiskNumbers
         {
@@ -121,76 +142,67 @@ namespace UsbEject.Library
             {
                 if (_diskNumbers == null)
                 {
-                    List<int> numbers = new List<int>();
-                    if (LogicalDrive != null)
-                    {
-                        Trace.WriteLine("Finding disk extents for volume: " + LogicalDrive);
-                        IntPtr hFile = Native.CreateFile(@"\\.\" + LogicalDrive, 0, Native.FILE_SHARE_READ | Native.FILE_SHARE_WRITE, IntPtr.Zero, Native.OPEN_EXISTING, 0, IntPtr.Zero);
-                        if (hFile.ToInt32() == Native.INVALID_HANDLE_VALUE)
-                            throw new Win32Exception(Marshal.GetLastWin32Error());
+                    _diskNumbers = GetDiskNumbers();
 
-                        int size = 0x400; // some big size
-                        IntPtr buffer = Marshal.AllocHGlobal(size);
-                        int bytesReturned = 0;
-                        try
-                        {
-                            if (!Native.DeviceIoControl(hFile, Native.IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS, IntPtr.Zero, 0, buffer, size, out bytesReturned, IntPtr.Zero))
-                            {
-                                // do nothing here on purpose
-                            }
-                        }
-                        finally
-                        {
-                            Native.CloseHandle(hFile);
-                        }
-
-                        if (bytesReturned > 0)
-                        {
-                            int numberOfDiskExtents = (int)Marshal.PtrToStructure(buffer, typeof(int));
-                            for (int i = 0; i < numberOfDiskExtents; i++)
-                            {
-                                IntPtr extentPtr = new IntPtr(buffer.ToInt32() + Marshal.SizeOf(typeof(long)) + i * Marshal.SizeOf(typeof(Native.DISK_EXTENT)));
-                                Native.DISK_EXTENT extent = (Native.DISK_EXTENT)Marshal.PtrToStructure(extentPtr, typeof(Native.DISK_EXTENT));
-                                numbers.Add(extent.DiskNumber);
-                            }
-                        }
-                        Marshal.FreeHGlobal(buffer);
-                    }
-
-                    _diskNumbers = new int[numbers.Count];
-                    numbers.CopyTo(_diskNumbers);
                 }
                 return _diskNumbers;
             }
         }
 
-        /// <summary>
-        /// Gets a list of removable devices for this volume.
-        /// </summary>
-        public override List<Device> RemovableDevices
+        private int[] GetDiskNumbers()
         {
-            get
+            List<int> numbers = new List<int>();
+            if (LogicalDrive != null)
             {
-                if (_removableDevices == null)
+                Trace.WriteLine("Finding disk extents for volume: " + LogicalDrive);
+                IntPtr hFile = Native.CreateFile(@"\\.\" + LogicalDrive, 0, Native.FILE_SHARE_READ | Native.FILE_SHARE_WRITE, IntPtr.Zero, Native.OPEN_EXISTING, 0, IntPtr.Zero);
+                if (hFile.ToInt32() == Native.INVALID_HANDLE_VALUE)
+                    throw new Win32Exception(Marshal.GetLastWin32Error());
+
+                int size = 0x400; // some big size
+                IntPtr buffer = Marshal.AllocHGlobal(size);
+                int bytesReturned = 0;
+                try
                 {
-                    _removableDevices = new List<Device>();
-                    if (Disks == null)
+                    if (!Native.DeviceIoControl(hFile, Native.IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS, IntPtr.Zero, 0, buffer, size, out bytesReturned, IntPtr.Zero))
                     {
-                        _removableDevices = base.RemovableDevices;
-                    }
-                    else
-                    {
-                        foreach (Device disk in Disks)
-                        {
-                            foreach (Device device in disk.RemovableDevices)
-                            {
-                                _removableDevices.Add(device);
-                            }
-                        }
+                        // do nothing here on purpose
                     }
                 }
-                return _removableDevices;
+                finally
+                {
+                    Native.CloseHandle(hFile);
+                }
+
+                if (bytesReturned > 0)
+                {
+                    int numberOfDiskExtents = (int)Marshal.PtrToStructure(buffer, typeof(int));
+                    for (int i = 0; i < numberOfDiskExtents; i++)
+                    {
+                        IntPtr extentPtr = new IntPtr(buffer.ToInt32() + Marshal.SizeOf(typeof(long)) + i * Marshal.SizeOf(typeof(Native.DISK_EXTENT)));
+                        Native.DISK_EXTENT extent = (Native.DISK_EXTENT)Marshal.PtrToStructure(extentPtr, typeof(Native.DISK_EXTENT));
+                        numbers.Add(extent.DiskNumber);
+                    }
+                }
+                Marshal.FreeHGlobal(buffer);
             }
+
+            return numbers.ToArray();
+        }
+
+        protected override List<Device> GetRemovableDevices()
+        {
+            if (Disks == null)
+            {
+                return base.GetRemovableDevices();
+            }
+
+            List<Device> removableDevices = new List<Device>();
+            foreach (Device disk in Disks)
+            {
+                removableDevices.AddRange(disk.RemovableDevices);
+            }
+            return removableDevices;
         }
 
         /// <summary>

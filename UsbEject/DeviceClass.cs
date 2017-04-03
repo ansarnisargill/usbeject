@@ -16,8 +16,6 @@ namespace UsbEject.Library
     public abstract class DeviceClass : IDisposable
     {
         private IntPtr _deviceInfoSet;
-        private Guid _classGuid;
-        private List<Device> _devices;
 
         protected DeviceClass(Guid classGuid)
             : this(classGuid, IntPtr.Zero)
@@ -55,6 +53,8 @@ namespace UsbEject.Library
             }
         }
 
+        private Guid _classGuid;
+
         /// <summary>
         /// Gets the device class's guid.
         /// </summary>
@@ -66,6 +66,8 @@ namespace UsbEject.Library
             }
         }
 
+        private List<Device> _devices;
+
         /// <summary>
         /// Gets the list of devices of this device class.
         /// </summary>
@@ -75,94 +77,101 @@ namespace UsbEject.Library
             {
                 if (_devices == null)
                 {
-                    _devices = new List<Device>();
-                    int index = 0;
-                    while (true)
-                    {
-                        Native.SP_DEVICE_INTERFACE_DATA interfaceData = new Native.SP_DEVICE_INTERFACE_DATA();
-
-                        if (!Native.SetupDiEnumDeviceInterfaces(_deviceInfoSet, null, ref _classGuid, index, interfaceData))
-                        {
-                            int error = Marshal.GetLastWin32Error();
-                            if (error != Native.ERROR_NO_MORE_ITEMS)
-                                throw new Win32Exception(error);
-                            break;
-                        }
-
-                        Native.SP_DEVINFO_DATA devData = new Native.SP_DEVINFO_DATA();
-                        int size = 0;
-                        if (!Native.SetupDiGetDeviceInterfaceDetail(_deviceInfoSet, interfaceData, IntPtr.Zero, 0, ref size, devData))
-                        {
-                            int error = Marshal.GetLastWin32Error();
-                            if (error != Native.ERROR_INSUFFICIENT_BUFFER)
-                                throw new Win32Exception(error);
-                        }
-
-                        IntPtr buffer = Marshal.AllocHGlobal(size);
-                        Native.SP_DEVICE_INTERFACE_DETAIL_DATA detailData = new Native.SP_DEVICE_INTERFACE_DETAIL_DATA();
-                        detailData.cbSize = Marshal.SizeOf(typeof(Native.SP_DEVICE_INTERFACE_DETAIL_DATA));
-                        Marshal.StructureToPtr(detailData, buffer, false);
-
-                        if (!Native.SetupDiGetDeviceInterfaceDetail(_deviceInfoSet, interfaceData, buffer, size, ref size, devData))
-                        {
-                            Marshal.FreeHGlobal(buffer);
-                            throw new Win32Exception(Marshal.GetLastWin32Error());
-                        }
-
-                        IntPtr pDevicePath = (IntPtr)((int)buffer + Marshal.SizeOf(typeof(int)));
-                        string devicePath = Marshal.PtrToStringAuto(pDevicePath);
-                        Marshal.FreeHGlobal(buffer);
-
-                        if (_classGuid.Equals(new Guid(Native.GUID_DEVINTERFACE_DISK)))
-                        {
-                            // Find disks
-                            IntPtr hFile = Native.CreateFile(devicePath, 0, Native.FILE_SHARE_READ | Native.FILE_SHARE_WRITE, IntPtr.Zero, Native.OPEN_EXISTING, 0, IntPtr.Zero);
-                            if (hFile.ToInt32() == Native.INVALID_HANDLE_VALUE)
-                                throw new Win32Exception(Marshal.GetLastWin32Error());
-
-                            int bytesReturned = 0;
-                            int numBufSize = 0x400; // some big size
-                            IntPtr numBuffer = Marshal.AllocHGlobal(numBufSize);
-                            Native.STORAGE_DEVICE_NUMBER disknum;
-
-                            try
-                            {
-                                if (!Native.DeviceIoControl(hFile, Native.IOCTL_STORAGE_GET_DEVICE_NUMBER, IntPtr.Zero, 0, numBuffer, numBufSize, out bytesReturned, IntPtr.Zero))
-                                {
-                                    Trace.WriteLine("IOCTL failed.");
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                Trace.WriteLine("Exception calling ioctl: " + ex);
-                            }
-                            finally
-                            {
-                                Native.CloseHandle(hFile);
-                            }
-
-                            if (bytesReturned > 0)
-                                disknum = (Native.STORAGE_DEVICE_NUMBER)Marshal.PtrToStructure(numBuffer, typeof(Native.STORAGE_DEVICE_NUMBER));
-                            else
-                                disknum = new Native.STORAGE_DEVICE_NUMBER() { DeviceNumber = -1, DeviceType = -1, PartitionNumber = -1 };
-
-                            Device device = CreateDevice(this, devData, devicePath, index, disknum.DeviceNumber);
-                            _devices.Add(device);
-
-                            Marshal.FreeHGlobal(hFile);
-                        }
-                        else
-                        {
-                            Device device = CreateDevice(this, devData, devicePath, index);
-                            _devices.Add(device);
-                        }
-
-                        index++;
-                    }
-                    _devices.Sort();
+                    _devices = GetDevices();
                 }
                 return _devices;
             }
+        }
+
+        private List<Device> GetDevices()
+        {
+            List<Device> devices = new List<Device>();
+            int index = 0;
+            while (true)
+            {
+                Native.SP_DEVICE_INTERFACE_DATA interfaceData = new Native.SP_DEVICE_INTERFACE_DATA();
+
+                if (!Native.SetupDiEnumDeviceInterfaces(_deviceInfoSet, null, ref _classGuid, index, interfaceData))
+                {
+                    int error = Marshal.GetLastWin32Error();
+                    if (error != Native.ERROR_NO_MORE_ITEMS)
+                        throw new Win32Exception(error);
+                    break;
+                }
+
+                Native.SP_DEVINFO_DATA devData = new Native.SP_DEVINFO_DATA();
+                int size = 0;
+                if (!Native.SetupDiGetDeviceInterfaceDetail(_deviceInfoSet, interfaceData, IntPtr.Zero, 0, ref size, devData))
+                {
+                    int error = Marshal.GetLastWin32Error();
+                    if (error != Native.ERROR_INSUFFICIENT_BUFFER)
+                        throw new Win32Exception(error);
+                }
+
+                IntPtr buffer = Marshal.AllocHGlobal(size);
+                Native.SP_DEVICE_INTERFACE_DETAIL_DATA detailData = new Native.SP_DEVICE_INTERFACE_DETAIL_DATA();
+                detailData.cbSize = Marshal.SizeOf(typeof(Native.SP_DEVICE_INTERFACE_DETAIL_DATA));
+                Marshal.StructureToPtr(detailData, buffer, false);
+
+                if (!Native.SetupDiGetDeviceInterfaceDetail(_deviceInfoSet, interfaceData, buffer, size, ref size, devData))
+                {
+                    Marshal.FreeHGlobal(buffer);
+                    throw new Win32Exception(Marshal.GetLastWin32Error());
+                }
+
+                IntPtr pDevicePath = (IntPtr)((int)buffer + Marshal.SizeOf(typeof(int)));
+                string devicePath = Marshal.PtrToStringAuto(pDevicePath);
+                Marshal.FreeHGlobal(buffer);
+
+                if (_classGuid.Equals(new Guid(Native.GUID_DEVINTERFACE_DISK)))
+                {
+                    // Find disks
+                    IntPtr hFile = Native.CreateFile(devicePath, 0, Native.FILE_SHARE_READ | Native.FILE_SHARE_WRITE, IntPtr.Zero, Native.OPEN_EXISTING, 0, IntPtr.Zero);
+                    if (hFile.ToInt32() == Native.INVALID_HANDLE_VALUE)
+                        throw new Win32Exception(Marshal.GetLastWin32Error());
+
+                    int bytesReturned = 0;
+                    int numBufSize = 0x400; // some big size
+                    IntPtr numBuffer = Marshal.AllocHGlobal(numBufSize);
+                    Native.STORAGE_DEVICE_NUMBER disknum;
+
+                    try
+                    {
+                        if (!Native.DeviceIoControl(hFile, Native.IOCTL_STORAGE_GET_DEVICE_NUMBER, IntPtr.Zero, 0, numBuffer, numBufSize, out bytesReturned, IntPtr.Zero))
+                        {
+                            Trace.WriteLine("IOCTL failed.");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Trace.WriteLine("Exception calling ioctl: " + ex);
+                    }
+                    finally
+                    {
+                        Native.CloseHandle(hFile);
+                    }
+
+                    if (bytesReturned > 0)
+                        disknum = (Native.STORAGE_DEVICE_NUMBER)Marshal.PtrToStructure(numBuffer, typeof(Native.STORAGE_DEVICE_NUMBER));
+                    else
+                        disknum = new Native.STORAGE_DEVICE_NUMBER() { DeviceNumber = -1, DeviceType = -1, PartitionNumber = -1 };
+
+                    Device device = CreateDevice(this, devData, devicePath, index, disknum.DeviceNumber);
+                    devices.Add(device);
+
+                    Marshal.FreeHGlobal(hFile);
+                }
+                else
+                {
+                    Device device = CreateDevice(this, devData, devicePath, index);
+                    devices.Add(device);
+                }
+
+                index++;
+            }
+
+            devices.Sort();
+            return devices;
         }
 
         internal Native.SP_DEVINFO_DATA GetInfo(int dnDevInst)
