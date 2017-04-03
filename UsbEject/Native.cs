@@ -19,7 +19,7 @@ namespace UsbEject.Library
         internal const int FILE_SHARE_WRITE = 0x00000002;
         internal const int OPEN_EXISTING = 3;
 
-        [DllImport("kernel32", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport("Kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         internal static extern bool GetVolumeNameForVolumeMountPoint(
             string volumeName,
             StringBuilder uniqueVolumeName,
@@ -147,7 +147,7 @@ namespace UsbEject.Library
             internal int reserved = 0;
         }
 
-        [DllImport("setupapi.dll")]
+        [DllImport("setupapi.dll", SetLastError = true)]
         internal static extern IntPtr SetupDiGetClassDevs(
             ref Guid classGuid,
             int enumerator,
@@ -162,7 +162,7 @@ namespace UsbEject.Library
             int memberIndex,
             SP_DEVICE_INTERFACE_DATA deviceInterfaceData);
 
-        [DllImport("setupapi.dll")]
+        [DllImport("setupapi.dll", SetLastError = true)]
         internal static extern bool SetupDiOpenDeviceInfo(
             IntPtr deviceInfoSet,
             string deviceInstanceId,
@@ -180,7 +180,7 @@ namespace UsbEject.Library
             ref int requiredSize,
             SP_DEVINFO_DATA deviceInfoData);
 
-        [DllImport("setupapi.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [DllImport("setupapi.dll", SetLastError = true, CharSet = CharSet.Auto)]
         internal static extern bool SetupDiGetDeviceRegistryProperty(
             IntPtr deviceInfoSet,
             SP_DEVINFO_DATA deviceInfoData,
