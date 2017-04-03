@@ -10,7 +10,11 @@ with the following modifications/additions:
 * Implemented thread-safe properties
 * Implemented Disposable pattern
 
-All the copyright headers are from the original author.
+## Notice
+
+Copyright © 2006 Simon Mourier
+
+THIS WORK IS PROVIDED UNDER THE TERMS OF THE CODE PROJECT OPEN LICENSE.
 
 THIS WORK IS PROVIDED "AS IS", "WHERE IS" AND "AS AVAILABLE", WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES OR CONDITIONS OR GUARANTEES.
 YOU, THE USER, ASSUME ALL RISK IN ITS USE, INCLUDING COPYRIGHT INFRINGEMENT, PATENT INFRINGEMENT, SUITABILITY, ETC.
