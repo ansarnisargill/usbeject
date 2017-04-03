@@ -21,7 +21,7 @@ namespace UsbEject.Library
         public VolumeDeviceClass()
             : base(new Guid(Native.GUID_DEVINTERFACE_VOLUME))
         {
-            foreach(string drive in Environment.GetLogicalDrives())
+            foreach (string drive in Environment.GetLogicalDrives())
             {
                 StringBuilder sb = new StringBuilder(1024);
                 if (Native.GetVolumeNameForVolumeMountPoint(drive, sb, sb.Capacity))

@@ -22,7 +22,7 @@ namespace UsbEject.Library
         private List<Device> _removableDevices;
 
         internal Volume(DeviceClass deviceClass, Native.SP_DEVINFO_DATA deviceInfoData, string path, int index)
-            :base(deviceClass, deviceInfoData, path, index)
+            : base(deviceClass, deviceInfoData, path, index)
         {
         }
 
@@ -39,7 +39,7 @@ namespace UsbEject.Library
                     if (!Native.GetVolumeNameForVolumeMountPoint(Path + "\\", sb, sb.Capacity))
                     {
                         // throw new Win32Exception(Marshal.GetLastWin32Error());
-                        
+
                     }
 
                     if (sb.Length > 0)

@@ -2,8 +2,6 @@
 // written by Simon Mourier <email: simon [underscore] mourier [at] hotmail [dot] com>
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace UsbEject.Library
 {
@@ -22,7 +20,7 @@ namespace UsbEject.Library
         Removable = 0x00000004,
         DockDevice = 0x00000008,
         UniqueId = 0x00000010,
-        SilentInstall =0x00000020,
+        SilentInstall = 0x00000020,
         RawDeviceOk = 0x00000040,
         SurpriseRemovalOk = 0x00000080,
         HardwareDisabled = 0x00000100,

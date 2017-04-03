@@ -2,8 +2,6 @@
 // written by Simon Mourier <email: simon [underscore] mourier [at] hotmail [dot] com>
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace UsbEject.Library
 {
@@ -16,7 +14,7 @@ namespace UsbEject.Library
         /// Initializes a new instance of the DiskDeviceClass class.
         /// </summary>
         public DiskDeviceClass()
-            :base(new Guid(Native.GUID_DEVINTERFACE_DISK))
+            : base(new Guid(Native.GUID_DEVINTERFACE_DISK))
         {
         }
     }

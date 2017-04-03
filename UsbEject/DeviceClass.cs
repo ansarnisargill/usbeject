@@ -14,15 +14,15 @@ namespace UsbEject.Library
     /// A generic base class for physical device classes.
     /// </summary>
     public abstract class DeviceClass : IDisposable
-	{
-		private IntPtr _deviceInfoSet;
-		private Guid _classGuid;
+    {
+        private IntPtr _deviceInfoSet;
+        private Guid _classGuid;
         private List<Device> _devices;
 
-		protected DeviceClass(Guid classGuid)
-			:this(classGuid, IntPtr.Zero)
-		{
-		}
+        protected DeviceClass(Guid classGuid)
+            : this(classGuid, IntPtr.Zero)
+        {
+        }
 
         internal virtual Device CreateDevice(DeviceClass deviceClass, Native.SP_DEVINFO_DATA deviceInfoData, string path, int index, int disknum = -1)
         {
@@ -35,36 +35,36 @@ namespace UsbEject.Library
         /// <param name="classGuid">A device class Guid.</param>
         /// <param name="hwndParent">The handle of the top-level window to be used for any user interface or IntPtr.Zero for no handle.</param>
 		protected DeviceClass(Guid classGuid, IntPtr hwndParent)
-		{
-			_classGuid = classGuid;
+        {
+            _classGuid = classGuid;
 
-			_deviceInfoSet = Native.SetupDiGetClassDevs(ref _classGuid, 0, hwndParent, Native.DIGCF_DEVICEINTERFACE | Native.DIGCF_PRESENT);
-			if (_deviceInfoSet.ToInt32() == Native.INVALID_HANDLE_VALUE)
-				throw new Win32Exception(Marshal.GetLastWin32Error());
-		}
+            _deviceInfoSet = Native.SetupDiGetClassDevs(ref _classGuid, 0, hwndParent, Native.DIGCF_DEVICEINTERFACE | Native.DIGCF_PRESENT);
+            if (_deviceInfoSet.ToInt32() == Native.INVALID_HANDLE_VALUE)
+                throw new Win32Exception(Marshal.GetLastWin32Error());
+        }
 
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
 		public void Dispose()
-		{
-			if (_deviceInfoSet != IntPtr.Zero)
-			{
-				Native.SetupDiDestroyDeviceInfoList(_deviceInfoSet);
-				_deviceInfoSet = IntPtr.Zero;
-			}
-		}
+        {
+            if (_deviceInfoSet != IntPtr.Zero)
+            {
+                Native.SetupDiDestroyDeviceInfoList(_deviceInfoSet);
+                _deviceInfoSet = IntPtr.Zero;
+            }
+        }
 
         /// <summary>
         /// Gets the device class's guid.
         /// </summary>
 		public Guid ClassGuid
-		{
-			get
-			{
-				return _classGuid;
-			}
-		}
+        {
+            get
+            {
+                return _classGuid;
+            }
+        }
 
         /// <summary>
         /// Gets the list of devices of this device class.
@@ -76,7 +76,7 @@ namespace UsbEject.Library
                 if (_devices == null)
                 {
                     _devices = new List<Device>();
-			        int index = 0;
+                    int index = 0;
                     while (true)
                     {
                         Native.SP_DEVICE_INTERFACE_DATA interfaceData = new Native.SP_DEVICE_INTERFACE_DATA();
@@ -270,5 +270,5 @@ namespace UsbEject.Library
             return value;
         }
 
-	}
+    }
 }
