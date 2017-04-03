@@ -39,6 +39,8 @@ namespace UsbEject.Library
             _deviceInfoSet = Native.SetupDiGetClassDevs(ref _classGuid, 0, hwndParent, Native.DIGCF_DEVICEINTERFACE | Native.DIGCF_PRESENT);
             if (_deviceInfoSet.ToInt32() == Native.INVALID_HANDLE_VALUE)
                 throw new Win32Exception(Marshal.GetLastWin32Error());
+
+            _devices = new Lazy<List<Device>>(GetDevices);
         }
 
         /// <summary>
@@ -66,7 +68,7 @@ namespace UsbEject.Library
             }
         }
 
-        private List<Device> _devices;
+        private readonly Lazy<List<Device>> _devices;
 
         /// <summary>
         /// Gets the list of devices of this device class.
@@ -75,11 +77,7 @@ namespace UsbEject.Library
         {
             get
             {
-                if (_devices == null)
-                {
-                    _devices = GetDevices();
-                }
-                return _devices;
+                return _devices.Value;
             }
         }
 

@@ -18,9 +18,13 @@ namespace UsbEject.Library
         internal Volume(DeviceClass deviceClass, Native.SP_DEVINFO_DATA deviceInfoData, string path, int index)
             : base(deviceClass, deviceInfoData, path, index)
         {
+            _volumeName = new Lazy<string>(GetVolumeName);
+            _logicalDrive = new Lazy<string>(GetLogicalDrive);
+            _disks = new Lazy<List<Device>>(GetDisks);
+            _diskNumbers = new Lazy<int[]>(GetDiskNumbers);
         }
 
-        private string _volumeName;
+        private readonly Lazy<string> _volumeName;
 
         /// <summary>
         /// Gets the volume's name.
@@ -29,11 +33,7 @@ namespace UsbEject.Library
         {
             get
             {
-                if (_volumeName == null)
-                {
-                    _volumeName = GetVolumeName();
-                }
-                return _volumeName;
+                return _volumeName.Value;
             }
         }
 
@@ -53,7 +53,7 @@ namespace UsbEject.Library
             return null;
         }
 
-        private string _logicalDrive;
+        private readonly Lazy<string> _logicalDrive;
 
         /// <summary>
         /// Gets the volume's logical drive in the form [letter]:\
@@ -62,11 +62,7 @@ namespace UsbEject.Library
         {
             get
             {
-                if (_logicalDrive == null)
-                {
-                    _logicalDrive = GetLogicalDrive();
-                }
-                return _logicalDrive;
+                return _logicalDrive.Value;
             }
         }
 
@@ -95,7 +91,7 @@ namespace UsbEject.Library
             return false;
         }
 
-        private List<Device> _disks;
+        private readonly Lazy<List<Device>> _disks;
 
         /// <summary>
         /// Gets a list of underlying disks for this volume.
@@ -104,11 +100,7 @@ namespace UsbEject.Library
         {
             get
             {
-                if (_disks == null)
-                {
-                    _disks = GetDisks();
-                }
-                return _disks;
+                return _disks.Value;
             }
         }
 
@@ -134,18 +126,13 @@ namespace UsbEject.Library
             return disks;
         }
 
-        private int[] _diskNumbers;
+        private readonly Lazy<int[]> _diskNumbers;
 
         public int[] DiskNumbers
         {
             get
             {
-                if (_diskNumbers == null)
-                {
-                    _diskNumbers = GetDiskNumbers();
-
-                }
-                return _diskNumbers;
+                return _diskNumbers.Value;
             }
         }
 

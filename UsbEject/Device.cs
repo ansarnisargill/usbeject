@@ -14,7 +14,7 @@ namespace UsbEject.Library
     [TypeConverter(typeof(ExpandableObjectConverter))]
     public class Device : IComparable
     {
-        private Native.SP_DEVINFO_DATA _deviceInfoData;
+        private readonly Native.SP_DEVINFO_DATA _deviceInfoData;
 
         internal Device(DeviceClass deviceClass, Native.SP_DEVINFO_DATA deviceInfoData, string path, int index, int disknum = -1)
         {
@@ -29,6 +29,15 @@ namespace UsbEject.Library
             _deviceInfoData = deviceInfoData;
             _index = index;
             _diskNumber = disknum;
+
+            _class = new Lazy<string>(GetClass);
+            _classGuid = new Lazy<string>(GetClassGuid);
+            _description = new Lazy<string>(GetDescription);
+            _friendlyName = new Lazy<string>(GetFriendlyName);
+            _capabilities = new Lazy<DeviceCapabilities>(GetCapabilities);
+            _isUsb = new Lazy<bool>(GetIsUsb);
+            _parent = new Lazy<Device>(GetParent);
+            _removableDevices = new Lazy<List<Device>>(GetRemovableDevices);
         }
 
         private readonly int _index;
@@ -95,7 +104,7 @@ namespace UsbEject.Library
             }
         }
 
-        private string _class;
+        private readonly Lazy<string> _class;
 
         /// <summary>
         /// Gets the device's class name.
@@ -104,11 +113,7 @@ namespace UsbEject.Library
         {
             get
             {
-                if (_class == null)
-                {
-                    _class = GetClass();
-                }
-                return _class;
+                return _class.Value;
             }
         }
 
@@ -117,7 +122,7 @@ namespace UsbEject.Library
             return _deviceClass.GetProperty(_deviceInfoData, Native.SPDRP_CLASS, null);
         }
 
-        private string _classGuid;
+        private readonly Lazy<string> _classGuid;
 
         /// <summary>
         /// Gets the device's class Guid as a string.
@@ -126,11 +131,7 @@ namespace UsbEject.Library
         {
             get
             {
-                if (_classGuid == null)
-                {
-                    _classGuid = GetClassGuid();
-                }
-                return _classGuid;
+                return _classGuid.Value;
             }
         }
 
@@ -139,7 +140,7 @@ namespace UsbEject.Library
             return _deviceClass.GetProperty(_deviceInfoData, Native.SPDRP_CLASSGUID, null);
         }
 
-        private string _description;
+        private readonly Lazy<string> _description;
 
         /// <summary>
         /// Gets the device's description.
@@ -148,11 +149,7 @@ namespace UsbEject.Library
         {
             get
             {
-                if (_description == null)
-                {
-                    _description = GetDescription();
-                }
-                return _description;
+                return _description.Value;
             }
         }
 
@@ -161,7 +158,7 @@ namespace UsbEject.Library
             return _deviceClass.GetProperty(_deviceInfoData, Native.SPDRP_DEVICEDESC, null);
         }
 
-        private string _friendlyName;
+        private readonly Lazy<string> _friendlyName;
 
         /// <summary>
         /// Gets the device's friendly name.
@@ -170,11 +167,7 @@ namespace UsbEject.Library
         {
             get
             {
-                if (_friendlyName == null)
-                {
-                    _friendlyName = GetFriendlyName();
-                }
-                return _friendlyName;
+                return _friendlyName.Value;
             }
         }
 
@@ -183,7 +176,7 @@ namespace UsbEject.Library
             return _deviceClass.GetProperty(_deviceInfoData, Native.SPDRP_FRIENDLYNAME, null);
         }
 
-        private DeviceCapabilities? _capabilities;
+        private readonly Lazy<DeviceCapabilities> _capabilities;
 
         /// <summary>
         /// Gets the device's capabilities.
@@ -192,10 +185,6 @@ namespace UsbEject.Library
         {
             get
             {
-                if (_capabilities == null)
-                {
-                    _capabilities = GetCapabilities();
-                }
                 return _capabilities.Value;
             }
         }
@@ -205,7 +194,7 @@ namespace UsbEject.Library
             return (DeviceCapabilities)_deviceClass.GetProperty(_deviceInfoData, Native.SPDRP_CAPABILITIES, 0);
         }
 
-        private bool? _isUsb;
+        private readonly Lazy<bool> _isUsb;
 
         /// <summary>
         /// Gets a value indicating whether this device is a USB device.
@@ -214,10 +203,6 @@ namespace UsbEject.Library
         {
             get
             {
-                if (_isUsb == null)
-                {
-                    _isUsb = GetIsUsb();
-                }
                 return _isUsb.Value;
             }
         }
@@ -233,7 +218,7 @@ namespace UsbEject.Library
             return Parent.IsUsb;
         }
 
-        private Device _parent;
+        private readonly Lazy<Device> _parent;
 
         /// <summary>
         /// Gets the device's parent device or null if this device has not parent.
@@ -242,11 +227,7 @@ namespace UsbEject.Library
         {
             get
             {
-                if (_parent == null)
-                {
-                    _parent = GetParent();
-                }
-                return _parent;
+                return _parent.Value;
             }
         }
 
@@ -262,7 +243,7 @@ namespace UsbEject.Library
             return null;
         }
 
-        private List<Device> _removableDevices;
+        private readonly Lazy<List<Device>> _removableDevices;
 
         /// <summary>
         /// Gets this device's list of removable devices.
@@ -272,11 +253,7 @@ namespace UsbEject.Library
         {
             get
             {
-                if (_removableDevices == null)
-                {
-                    _removableDevices = GetRemovableDevices();
-                }
-                return _removableDevices;
+                return _removableDevices.Value;
             }
         }
 

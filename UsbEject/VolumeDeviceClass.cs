@@ -13,7 +13,7 @@ namespace UsbEject.Library
     /// </summary>
     public class VolumeDeviceClass : DeviceClass
     {
-        internal SortedDictionary<string, string> _logicalDrives = new SortedDictionary<string, string>();
+        internal readonly SortedDictionary<string, string> _logicalDrives = new SortedDictionary<string, string>();
 
         /// <summary>
         /// Initializes a new instance of the VolumeDeviceClass class.

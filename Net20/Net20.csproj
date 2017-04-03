@@ -41,6 +41,10 @@
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Func.cs" />
+    <Compile Include="Lazy.cs" />
+  </ItemGroup>
   <Import Project="..\UsbEject\UsbEject.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
