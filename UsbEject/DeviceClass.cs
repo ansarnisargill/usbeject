@@ -43,10 +43,9 @@ namespace UsbEject.Library
             _devices = new Lazy<List<Device>>(GetDevices);
         }
 
-        /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-        /// </summary>
-		public void Dispose()
+        #region IDisposable Support
+
+        protected virtual void Dispose(bool disposing)
         {
             if (_deviceInfoSet != IntPtr.Zero)
             {
@@ -54,6 +53,22 @@ namespace UsbEject.Library
                 _deviceInfoSet = IntPtr.Zero;
             }
         }
+
+        ~DeviceClass()
+        {
+            Dispose(false);
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        #endregion
 
         private Guid _classGuid;
 
@@ -276,6 +291,5 @@ namespace UsbEject.Library
             Marshal.FreeHGlobal(propertyBuffer);
             return value;
         }
-
     }
 }
