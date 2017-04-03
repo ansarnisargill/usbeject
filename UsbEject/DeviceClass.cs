@@ -37,7 +37,7 @@ namespace UsbEject.Library
             _classGuid = classGuid;
 
             _deviceInfoSet = Native.SetupDiGetClassDevs(ref _classGuid, 0, hwndParent, Native.DIGCF_DEVICEINTERFACE | Native.DIGCF_PRESENT);
-            if (_deviceInfoSet.ToInt32() == Native.INVALID_HANDLE_VALUE)
+            if (_deviceInfoSet == (IntPtr)Native.INVALID_HANDLE_VALUE)
                 throw new Win32Exception(Marshal.GetLastWin32Error());
 
             _devices = new Lazy<List<Device>>(GetDevices);
@@ -103,6 +103,7 @@ namespace UsbEject.Library
             while (true)
             {
                 Native.SP_DEVICE_INTERFACE_DATA interfaceData = new Native.SP_DEVICE_INTERFACE_DATA();
+                interfaceData.cbSize = (uint)Marshal.SizeOf(interfaceData);
 
                 if (!Native.SetupDiEnumDeviceInterfaces(_deviceInfoSet, null, ref _classGuid, index, interfaceData))
                 {
@@ -113,6 +114,7 @@ namespace UsbEject.Library
                 }
 
                 Native.SP_DEVINFO_DATA devData = new Native.SP_DEVINFO_DATA();
+                devData.cbSize = (uint)Marshal.SizeOf(devData);
                 int size = 0;
                 if (!Native.SetupDiGetDeviceInterfaceDetail(_deviceInfoSet, interfaceData, IntPtr.Zero, 0, ref size, devData))
                 {
@@ -123,7 +125,7 @@ namespace UsbEject.Library
 
                 IntPtr buffer = Marshal.AllocHGlobal(size);
                 Native.SP_DEVICE_INTERFACE_DETAIL_DATA detailData = new Native.SP_DEVICE_INTERFACE_DETAIL_DATA();
-                detailData.cbSize = Marshal.SizeOf(typeof(Native.SP_DEVICE_INTERFACE_DETAIL_DATA));
+                detailData.cbSize = (uint)Marshal.SizeOf(detailData);
                 Marshal.StructureToPtr(detailData, buffer, false);
 
                 if (!Native.SetupDiGetDeviceInterfaceDetail(_deviceInfoSet, interfaceData, buffer, size, ref size, devData))
@@ -140,7 +142,7 @@ namespace UsbEject.Library
                 {
                     // Find disks
                     IntPtr hFile = Native.CreateFile(devicePath, 0, Native.FILE_SHARE_READ | Native.FILE_SHARE_WRITE, IntPtr.Zero, Native.OPEN_EXISTING, 0, IntPtr.Zero);
-                    if (hFile.ToInt32() == Native.INVALID_HANDLE_VALUE)
+                    if (hFile == (IntPtr)Native.INVALID_HANDLE_VALUE)
                         throw new Win32Exception(Marshal.GetLastWin32Error());
 
                     int bytesReturned = 0;
@@ -187,7 +189,7 @@ namespace UsbEject.Library
             return devices;
         }
 
-        internal Native.SP_DEVINFO_DATA GetInfo(int dnDevInst)
+        internal Native.SP_DEVINFO_DATA GetInfo(uint dnDevInst)
         {
             StringBuilder sb = new StringBuilder(1024);
             int hr = Native.CM_Get_Device_ID(dnDevInst, sb, sb.Capacity, 0);
@@ -195,7 +197,7 @@ namespace UsbEject.Library
                 throw new Win32Exception(hr);
 
             Native.SP_DEVINFO_DATA devData = new Native.SP_DEVINFO_DATA();
-            devData.cbSize = Marshal.SizeOf(typeof(Native.SP_DEVINFO_DATA));
+            devData.cbSize = (uint)Marshal.SizeOf(devData);
             if (!Native.SetupDiOpenDeviceInfo(_deviceInfoSet, sb.ToString(), IntPtr.Zero, 0, devData))
                 throw new Win32Exception(Marshal.GetLastWin32Error());
 

@@ -96,7 +96,7 @@ namespace UsbEject.Library
         /// <summary>
         /// Gets the device's instance handle.
         /// </summary>
-        public int InstanceHandle
+        public uint InstanceHandle
         {
             get
             {
@@ -233,7 +233,7 @@ namespace UsbEject.Library
 
         private Device GetParent()
         {
-            int parentDevInst = 0;
+            uint parentDevInst = 0;
             int hr = Native.CM_Get_Parent(ref parentDevInst, _deviceInfoData.devInst, 0);
             if (hr == 0)
             {

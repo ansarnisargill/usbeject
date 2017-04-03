@@ -83,20 +83,20 @@ namespace UsbEject.Library
         // from cfgmgr32.h
         [DllImport("setupapi.dll")]
         internal static extern int CM_Get_Parent(
-            ref int pdnDevInst,
-            int dnDevInst,
+            ref uint pdnDevInst,
+            uint dnDevInst,
             int ulFlags);
 
         [DllImport("setupapi.dll")]
         internal static extern int CM_Get_Device_ID(
-            int dnDevInst,
+            uint dnDevInst,
             StringBuilder buffer,
             int bufferLen,
             int ulFlags);
 
         [DllImport("setupapi.dll")]
         internal static extern int CM_Request_Device_Eject(
-            int dnDevInst,
+            uint dnDevInst,
             out PNP_VETO_TYPE pVetoType,
             StringBuilder pszVetoName,
             int ulNameLength,
@@ -105,7 +105,7 @@ namespace UsbEject.Library
 
         [DllImport("setupapi.dll", EntryPoint = "CM_Request_Device_Eject")]
         internal static extern int CM_Request_Device_Eject_NoUi(
-            int dnDevInst,
+            uint dnDevInst,
             IntPtr pVetoType,
             StringBuilder pszVetoName,
             int ulNameLength,
@@ -125,25 +125,25 @@ namespace UsbEject.Library
         [StructLayout(LayoutKind.Sequential)]
         internal class SP_DEVINFO_DATA
         {
-            internal int cbSize = Marshal.SizeOf(typeof(SP_DEVINFO_DATA));
+            internal uint cbSize;
             internal Guid classGuid = Guid.Empty; // temp
-            internal int devInst = 0; // dumy
+            internal uint devInst = 0; // dumy
             internal int reserved = 0;
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 2)]
         internal struct SP_DEVICE_INTERFACE_DETAIL_DATA
         {
-            internal int cbSize;
+            internal uint cbSize;
             internal short devicePath;
         }
 
         [StructLayout(LayoutKind.Sequential)]
         internal class SP_DEVICE_INTERFACE_DATA
         {
-            internal int cbSize = Marshal.SizeOf(typeof(SP_DEVICE_INTERFACE_DATA));
+            internal uint cbSize;
             internal Guid interfaceClassGuid = Guid.Empty; // temp
-            internal int flags = 0;
+            internal uint flags = 0;
             internal int reserved = 0;
         }
 

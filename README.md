@@ -1,20 +1,16 @@
 # usbeject
-Working C# code to safely eject removable storage (Windows 8.1, compiled 32-bit)
+Working C# code to safely eject removable storage
 
 This is a class library of code stolen from [this CodeProject article](https://www.codeproject.com/Articles/13530/Eject-USB-disks-using-C)
 with the following modifications/additions:
 
 * Fixed a bug where it wasn't ejecting the drive it claimed to be ejecting (@mthiffau)
+* Added AnyCPU support (@zergmk2)
 * Built for .NET 2.0, 3.5 and 4.0 in addition to .NET 4.5
 * Implemented thread-safe properties
 * Implemented Disposable pattern
 
 All the copyright headers are from the original author.
-
-I'm running this code on Windows 8.1 Embedded Industrial (64-bit), but compiled as a 32-bit dll. I don't think it will work when
-compiled for 64-bit, and I don't plan on doing anything about that. If you can/do, feel free to send me a pull request. Preferably
-you can modify the code in such a way that it will work for both (#ifdefs, etc) so I don't have to figure out what you changed and
-go back and add them myself. 
 
 THIS WORK IS PROVIDED "AS IS", "WHERE IS" AND "AS AVAILABLE", WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES OR CONDITIONS OR GUARANTEES.
 YOU, THE USER, ASSUME ALL RISK IN ITS USE, INCLUDING COPYRIGHT INFRINGEMENT, PATENT INFRINGEMENT, SUITABILITY, ETC.
