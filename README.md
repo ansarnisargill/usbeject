@@ -9,6 +9,7 @@ with the following modifications/additions:
 * Fixed a bug where it wasn't ejecting the drive it claimed to be ejecting (@mthiffau)
 * Added AnyCPU support (@zergmk2)
 * Built for .NET 2.0, 3.5 and 4.0 in addition to .NET 4.5
+* Simplified usage
 * Implemented thread-safe properties
 * Implemented Disposable pattern
 * Fixed minor bugs
@@ -18,7 +19,7 @@ Installation
 ------------
 
 ```powershell
-Install-Package -pre UsbEject
+Install-Package UsbEject -Pre
 ```
 
 
@@ -28,7 +29,7 @@ Usage
 ```csharp
 using (VolumeDeviceClass volumes = new VolumeDeviceClass())
 {
-  Volume volume = volumes.Devices.Cast<Volume>().SingleOrDefault(v => ejectDrive.Equals(v.LogicalDrive));
+  Volume volume = volumes.Volumes.SingleOrDefault(v => ejectDrive.Equals(v.LogicalDrive));
   volume?.Eject(false);
 }
 ```
