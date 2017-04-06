@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.9
+VisualStudioVersion = 15.0.26403.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "UsbEject", "UsbEject\UsbEject.shproj", "{C2246CDE-CA85-42F5-A139-BE4ED68DF978}"
 EndProject
@@ -12,6 +12,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net35", "Net35\Net35.csproj", "{03345201-6908-4FDE-9867-A20F8A461A7F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net40", "Net40\Net40.csproj", "{FFA0ABFC-24FE-4C9A-A5EF-35D783291AE6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3FD79D2E-99C3-4E8B-A14D-320FAF056F05}"
+	ProjectSection(SolutionItems) = preProject
+		README.txt = README.txt
+		UsbEject.nuspec = UsbEject.nuspec
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
