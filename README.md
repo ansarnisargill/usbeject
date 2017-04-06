@@ -14,6 +14,14 @@ with the following modifications/additions:
 * Fixed minor bugs
 
 
+Installation
+------------
+
+```powershell
+Install-Package UsbEject -pre
+```
+
+
 Usage
 -----
 
