@@ -13,6 +13,8 @@ namespace UsbEject.Library
     /// </summary>
     public class VolumeDeviceClass : DeviceClass
     {
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the VolumeDeviceClass class.
         /// </summary>
@@ -23,13 +25,18 @@ namespace UsbEject.Library
             _volumes = new Lazy<IEnumerable<Volume>>(GetVolumes);
         }
 
+        #endregion
+
+        #region Member Overrides
+
         internal override Device CreateDevice(DeviceClass deviceClass, Native.SP_DEVINFO_DATA deviceInfoData, string path, int index, int disknum = -1)
         {
             return new Volume(deviceClass, deviceInfoData, path, index);
         }
 
-        #region LogicalDrives
+        #endregion
 
+        #region LogicalDrives
         private readonly Lazy<IDictionary<string, string>> _logicalDrives;
 
         internal IDictionary<string, string> LogicalDrives
@@ -57,11 +64,9 @@ namespace UsbEject.Library
 
             return logicalDrives;
         }
-
         #endregion
 
         #region Volumes
-
         private readonly Lazy<IEnumerable<Volume>> _volumes;
 
         /// <summary>
@@ -86,7 +91,6 @@ namespace UsbEject.Library
 
             return volumes;
         }
-
         #endregion
     }
 }

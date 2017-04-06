@@ -15,7 +15,13 @@ namespace UsbEject.Library
     /// </summary>
     public abstract class DeviceClass : IDisposable
     {
+        #region Fields
+
         private IntPtr _deviceInfoSet;
+
+        #endregion
+
+        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the DeviceClass class.
@@ -24,11 +30,6 @@ namespace UsbEject.Library
         protected DeviceClass(Guid classGuid)
             : this(classGuid, IntPtr.Zero)
         {
-        }
-
-        internal virtual Device CreateDevice(DeviceClass deviceClass, Native.SP_DEVINFO_DATA deviceInfoData, string path, int index, int disknum = -1)
-        {
-            return new Device(deviceClass, deviceInfoData, path, index, disknum);
         }
 
         /// <summary>
@@ -46,6 +47,15 @@ namespace UsbEject.Library
 
             _devices = new Lazy<List<Device>>(GetDevices);
         }
+
+        #endregion
+
+        #region CreateDevice
+        internal virtual Device CreateDevice(DeviceClass deviceClass, Native.SP_DEVINFO_DATA deviceInfoData, string path, int index, int disknum = -1)
+        {
+            return new Device(deviceClass, deviceInfoData, path, index, disknum);
+        }
+        #endregion
 
         #region IDisposable Support
 
@@ -81,6 +91,7 @@ namespace UsbEject.Library
 
         #endregion
 
+        #region ClassGuid
         private Guid _classGuid;
 
         /// <summary>
@@ -93,7 +104,9 @@ namespace UsbEject.Library
                 return _classGuid;
             }
         }
+        #endregion
 
+        #region Devices
         private readonly Lazy<List<Device>> _devices;
 
         /// <summary>
@@ -208,6 +221,9 @@ namespace UsbEject.Library
             devices.Sort();
             return devices;
         }
+        #endregion
+
+        #region Helper Methods
 
         internal Native.SP_DEVINFO_DATA GetInfo(uint dnDevInst)
         {
@@ -227,7 +243,7 @@ namespace UsbEject.Library
         internal string GetProperty(Native.SP_DEVINFO_DATA devData, int property, string defaultValue)
         {
             if (devData == null)
-                throw new ArgumentNullException("devData");
+                throw new ArgumentNullException(nameof(devData));
 
             int propertyRegDataType = 0;
             int requiredSize;
@@ -261,7 +277,7 @@ namespace UsbEject.Library
         internal int GetProperty(Native.SP_DEVINFO_DATA devData, int property, int defaultValue)
         {
             if (devData == null)
-                throw new ArgumentNullException("devData");
+                throw new ArgumentNullException(nameof(devData));
 
             int propertyRegDataType = 0;
             int requiredSize;
@@ -291,5 +307,7 @@ namespace UsbEject.Library
                 Marshal.FreeHGlobal(propertyBuffer);
             }
         }
+
+        #endregion
     }
 }

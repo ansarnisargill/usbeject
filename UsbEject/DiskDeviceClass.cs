@@ -10,6 +10,8 @@ namespace UsbEject.Library
     /// </summary>
     public class DiskDeviceClass : DeviceClass
     {
+        #region Constructors
+
         /// <summary>
         /// Initializes a new instance of the DiskDeviceClass class.
         /// </summary>
@@ -17,5 +19,7 @@ namespace UsbEject.Library
             : base(new Guid(Native.GUID_DEVINTERFACE_DISK))
         {
         }
+
+        #endregion
     }
 }

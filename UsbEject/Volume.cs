@@ -15,6 +15,8 @@ namespace UsbEject.Library
     /// </summary>
     public class Volume : Device, IComparable
     {
+        #region Constructors
+
         internal Volume(DeviceClass deviceClass, Native.SP_DEVINFO_DATA deviceInfoData, string path, int index)
             : base(deviceClass, deviceInfoData, path, index)
         {
@@ -24,6 +26,9 @@ namespace UsbEject.Library
             _diskNumbers = new Lazy<int[]>(GetDiskNumbers);
         }
 
+        #endregion
+
+        #region VolumeName
         private readonly Lazy<string> _volumeName;
 
         /// <summary>
@@ -52,7 +57,9 @@ namespace UsbEject.Library
 
             return null;
         }
+        #endregion
 
+        #region LogicalDrive
         private readonly Lazy<string> _logicalDrive;
 
         /// <summary>
@@ -77,20 +84,9 @@ namespace UsbEject.Library
 
             return null;
         }
+        #endregion
 
-        internal override bool GetIsUsb()
-        {
-            if (Disks != null)
-            {
-                foreach (Device disk in Disks)
-                {
-                    if (disk.IsUsb)
-                        return true;
-                }
-            }
-            return false;
-        }
-
+        #region Disks
         private readonly Lazy<List<Device>> _disks;
 
         /// <summary>
@@ -125,7 +121,9 @@ namespace UsbEject.Library
 
             return disks;
         }
+        #endregion
 
+        #region DiskNumbers
         private readonly Lazy<int[]> _diskNumbers;
 
         /// <summary>
@@ -185,6 +183,22 @@ namespace UsbEject.Library
 
             return numbers.ToArray();
         }
+        #endregion
+
+        #region Member Overrides
+
+        internal override bool GetIsUsb()
+        {
+            if (Disks != null)
+            {
+                foreach (Device disk in Disks)
+                {
+                    if (disk.IsUsb)
+                        return true;
+                }
+            }
+            return false;
+        }
 
         internal override List<Device> GetRemovableDevices()
         {
@@ -220,5 +234,7 @@ namespace UsbEject.Library
 
             return LogicalDrive.CompareTo(device.LogicalDrive);
         }
+
+        #endregion
     }
 }
