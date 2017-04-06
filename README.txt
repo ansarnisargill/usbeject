@@ -9,7 +9,7 @@ Usage
 
 using (VolumeDeviceClass volumes = new VolumeDeviceClass())
 {
-  Volume volume = volumes.Devices.SingleOrDefault(v => ejectDrive.Equals(v.LogicalDrive));
+  Volume volume = volumes.Devices.Cast<Volume>().SingleOrDefault(v => ejectDrive.Equals(v.LogicalDrive));
   volume?.Eject(false);
 }
 
