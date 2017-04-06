@@ -134,20 +134,24 @@ namespace UsbEject.Library
                         throw new Win32Exception(error);
                 }
 
+                string devicePath;
                 IntPtr buffer = Marshal.AllocHGlobal(size);
-                Native.SP_DEVICE_INTERFACE_DETAIL_DATA detailData = new Native.SP_DEVICE_INTERFACE_DETAIL_DATA();
-                detailData.cbSize = (uint)Marshal.SizeOf(detailData);
-                Marshal.StructureToPtr(detailData, buffer, false);
+                try
+                {
+                    Native.SP_DEVICE_INTERFACE_DETAIL_DATA detailData = new Native.SP_DEVICE_INTERFACE_DETAIL_DATA();
+                    detailData.cbSize = (uint)Marshal.SizeOf(detailData);
+                    Marshal.StructureToPtr(detailData, buffer, false);
 
-                if (!Native.SetupDiGetDeviceInterfaceDetail(_deviceInfoSet, interfaceData, buffer, size, ref size, devData))
+                    if (!Native.SetupDiGetDeviceInterfaceDetail(_deviceInfoSet, interfaceData, buffer, size, ref size, devData))
+                        throw new Win32Exception(Marshal.GetLastWin32Error());
+
+                    IntPtr pDevicePath = (IntPtr)((int)buffer + Marshal.SizeOf(typeof(int)));
+                    devicePath = Marshal.PtrToStringAuto(pDevicePath);
+                }
+                finally
                 {
                     Marshal.FreeHGlobal(buffer);
-                    throw new Win32Exception(Marshal.GetLastWin32Error());
                 }
-
-                IntPtr pDevicePath = (IntPtr)((int)buffer + Marshal.SizeOf(typeof(int)));
-                string devicePath = Marshal.PtrToStringAuto(pDevicePath);
-                Marshal.FreeHGlobal(buffer);
 
                 if (_classGuid.Equals(new Guid(Native.GUID_DEVINTERFACE_DISK)))
                 {
@@ -156,36 +160,41 @@ namespace UsbEject.Library
                     if (hFile == (IntPtr)Native.INVALID_HANDLE_VALUE)
                         throw new Win32Exception(Marshal.GetLastWin32Error());
 
-                    int bytesReturned = 0;
                     int numBufSize = 0x400; // some big size
                     IntPtr numBuffer = Marshal.AllocHGlobal(numBufSize);
-                    Native.STORAGE_DEVICE_NUMBER disknum;
-
                     try
                     {
-                        if (!Native.DeviceIoControl(hFile, Native.IOCTL_STORAGE_GET_DEVICE_NUMBER, IntPtr.Zero, 0, numBuffer, numBufSize, out bytesReturned, IntPtr.Zero))
+                        Native.STORAGE_DEVICE_NUMBER disknum;
+
+                        int bytesReturned = 0;
+                        try
                         {
-                            Trace.WriteLine("IOCTL failed.");
+                            if (!Native.DeviceIoControl(hFile, Native.IOCTL_STORAGE_GET_DEVICE_NUMBER, IntPtr.Zero, 0, numBuffer, numBufSize, out bytesReturned, IntPtr.Zero))
+                            {
+                                Trace.WriteLine("IOCTL failed.");
+                            }
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        Trace.WriteLine("Exception calling ioctl: " + ex);
+                        catch (Exception ex)
+                        {
+                            Trace.WriteLine("Exception calling ioctl: " + ex);
+                        }
+                        finally
+                        {
+                            Native.CloseHandle(hFile);
+                        }
+
+                        if (bytesReturned > 0)
+                            disknum = (Native.STORAGE_DEVICE_NUMBER)Marshal.PtrToStructure(numBuffer, typeof(Native.STORAGE_DEVICE_NUMBER));
+                        else
+                            disknum = new Native.STORAGE_DEVICE_NUMBER() { DeviceNumber = -1, DeviceType = -1, PartitionNumber = -1 };
+
+                        Device device = CreateDevice(this, devData, devicePath, index, disknum.DeviceNumber);
+                        devices.Add(device);
                     }
                     finally
                     {
-                        Native.CloseHandle(hFile);
+                        Marshal.FreeHGlobal(numBuffer);
                     }
-
-                    if (bytesReturned > 0)
-                        disknum = (Native.STORAGE_DEVICE_NUMBER)Marshal.PtrToStructure(numBuffer, typeof(Native.STORAGE_DEVICE_NUMBER));
-                    else
-                        disknum = new Native.STORAGE_DEVICE_NUMBER() { DeviceNumber = -1, DeviceType = -1, PartitionNumber = -1 };
-
-                    Device device = CreateDevice(this, devData, devicePath, index, disknum.DeviceNumber);
-                    devices.Add(device);
-
-                    Marshal.FreeHGlobal(hFile);
                 }
                 else
                 {
@@ -225,24 +234,28 @@ namespace UsbEject.Library
             int propertyBufferSize = 1024;
 
             IntPtr propertyBuffer = Marshal.AllocHGlobal(propertyBufferSize);
-            if (!Native.SetupDiGetDeviceRegistryProperty(_deviceInfoSet,
-                devData,
-                property,
-                out propertyRegDataType,
-                propertyBuffer,
-                propertyBufferSize,
-                out requiredSize))
+            try
+            {
+                if (!Native.SetupDiGetDeviceRegistryProperty(_deviceInfoSet,
+                    devData,
+                    property,
+                    out propertyRegDataType,
+                    propertyBuffer,
+                    propertyBufferSize,
+                    out requiredSize))
+                {
+                    int error = Marshal.GetLastWin32Error();
+                    if (error != Native.ERROR_INVALID_DATA)
+                        throw new Win32Exception(error);
+                    return defaultValue;
+                }
+
+                return Marshal.PtrToStringAuto(propertyBuffer);
+            }
+            finally
             {
                 Marshal.FreeHGlobal(propertyBuffer);
-                int error = Marshal.GetLastWin32Error();
-                if (error != Native.ERROR_INVALID_DATA)
-                    throw new Win32Exception(error);
-                return defaultValue;
             }
-
-            string value = Marshal.PtrToStringAuto(propertyBuffer);
-            Marshal.FreeHGlobal(propertyBuffer);
-            return value;
         }
 
         internal int GetProperty(Native.SP_DEVINFO_DATA devData, int property, int defaultValue)
@@ -255,54 +268,28 @@ namespace UsbEject.Library
             int propertyBufferSize = Marshal.SizeOf(typeof(int));
 
             IntPtr propertyBuffer = Marshal.AllocHGlobal(propertyBufferSize);
-            if (!Native.SetupDiGetDeviceRegistryProperty(_deviceInfoSet,
-                devData,
-                property,
-                out propertyRegDataType,
-                propertyBuffer,
-                propertyBufferSize,
-                out requiredSize))
+            try
+            {
+                if (!Native.SetupDiGetDeviceRegistryProperty(_deviceInfoSet,
+                    devData,
+                    property,
+                    out propertyRegDataType,
+                    propertyBuffer,
+                    propertyBufferSize,
+                    out requiredSize))
+                {
+                    int error = Marshal.GetLastWin32Error();
+                    if (error != Native.ERROR_INVALID_DATA)
+                        throw new Win32Exception(error);
+                    return defaultValue;
+                }
+
+                return (int)Marshal.PtrToStructure(propertyBuffer, typeof(int));
+            }
+            finally
             {
                 Marshal.FreeHGlobal(propertyBuffer);
-                int error = Marshal.GetLastWin32Error();
-                if (error != Native.ERROR_INVALID_DATA)
-                    throw new Win32Exception(error);
-                return defaultValue;
             }
-
-            int value = (int)Marshal.PtrToStructure(propertyBuffer, typeof(int));
-            Marshal.FreeHGlobal(propertyBuffer);
-            return value;
-        }
-
-        internal Guid GetProperty(Native.SP_DEVINFO_DATA devData, int property, Guid defaultValue)
-        {
-            if (devData == null)
-                throw new ArgumentNullException("devData");
-
-            int propertyRegDataType = 0;
-            int requiredSize;
-            int propertyBufferSize = Marshal.SizeOf(typeof(Guid));
-
-            IntPtr propertyBuffer = Marshal.AllocHGlobal(propertyBufferSize);
-            if (!Native.SetupDiGetDeviceRegistryProperty(_deviceInfoSet,
-                devData,
-                property,
-                out propertyRegDataType,
-                propertyBuffer,
-                propertyBufferSize,
-                out requiredSize))
-            {
-                Marshal.FreeHGlobal(propertyBuffer);
-                int error = Marshal.GetLastWin32Error();
-                if (error != Native.ERROR_INVALID_DATA)
-                    throw new Win32Exception(error);
-                return defaultValue;
-            }
-
-            Guid value = (Guid)Marshal.PtrToStructure(propertyBuffer, typeof(Guid));
-            Marshal.FreeHGlobal(propertyBuffer);
-            return value;
         }
     }
 }
