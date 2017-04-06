@@ -207,7 +207,7 @@ namespace UsbEject.Library
             }
         }
 
-        protected virtual bool GetIsUsb()
+        internal virtual bool GetIsUsb()
         {
             if (Class == "USB")
                 return true;
@@ -257,7 +257,7 @@ namespace UsbEject.Library
             }
         }
 
-        protected virtual List<Device> GetRemovableDevices()
+        internal virtual List<Device> GetRemovableDevices()
         {
             List<Device> removableDevices = new List<Device>();
 

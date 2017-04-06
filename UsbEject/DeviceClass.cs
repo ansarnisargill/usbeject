@@ -17,6 +17,10 @@ namespace UsbEject.Library
     {
         private IntPtr _deviceInfoSet;
 
+        /// <summary>
+        /// Initializes a new instance of the DeviceClass class.
+        /// </summary>
+        /// <param name="classGuid">A device class Guid.</param>
         protected DeviceClass(Guid classGuid)
             : this(classGuid, IntPtr.Zero)
         {
@@ -45,6 +49,10 @@ namespace UsbEject.Library
 
         #region IDisposable Support
 
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
         {
             if (_deviceInfoSet != IntPtr.Zero)
@@ -54,6 +62,9 @@ namespace UsbEject.Library
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         ~DeviceClass()
         {
             Dispose(false);

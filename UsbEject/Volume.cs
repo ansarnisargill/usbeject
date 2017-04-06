@@ -78,7 +78,7 @@ namespace UsbEject.Library
             return null;
         }
 
-        protected override bool GetIsUsb()
+        internal override bool GetIsUsb()
         {
             if (Disks != null)
             {
@@ -128,6 +128,9 @@ namespace UsbEject.Library
 
         private readonly Lazy<int[]> _diskNumbers;
 
+        /// <summary>
+        /// Gets the volume's disk numbers
+        /// </summary>
         public int[] DiskNumbers
         {
             get
@@ -177,7 +180,7 @@ namespace UsbEject.Library
             return numbers.ToArray();
         }
 
-        protected override List<Device> GetRemovableDevices()
+        internal override List<Device> GetRemovableDevices()
         {
             if (Disks == null)
             {
