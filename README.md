@@ -1,4 +1,6 @@
-# usbeject
+usbeject
+========
+
 Safely eject removable storage
 
 This is a class library of code taken from a [CodeProject article](https://www.codeproject.com/Articles/13530/Eject-USB-disks-using-C)
@@ -11,7 +13,9 @@ with the following modifications/additions:
 * Implemented Disposable pattern
 * Fixed minor bugs
 
-## Usage
+
+Usage
+-----
 
 ```csharp
 using (VolumeDeviceClass volumes = new VolumeDeviceClass())
@@ -21,7 +25,9 @@ using (VolumeDeviceClass volumes = new VolumeDeviceClass())
 }
 ```
 
-## Notice
+
+Notice
+------
 
 Copyright © 2006 Simon Mourier
 
