@@ -16,16 +16,8 @@ with the following modifications/additions:
 ```csharp
 using (VolumeDeviceClass volumes = new VolumeDeviceClass())
 {
-  foreach (Volume vol in volumes.Devices)
-  {
-    if (eject_drive.Equals(vol.LogicalDrive))
-    {
-      eventLog.WriteEntry("Attempting to eject drive: " + eject_drive);
-      vol.Eject(false);
-      eventLog.WriteEntry("Done ejecting drive.");
-      break;
-    }
-  }
+  Volume volume = volumes.Devices.SingleOrDefault(v => ejectDrive.Equals(v.LogicalDrive));
+  volume?.Eject(false);
 }
 ```
 
