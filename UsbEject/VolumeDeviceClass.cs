@@ -21,13 +21,14 @@ namespace UsbEject.Library
         public VolumeDeviceClass()
             : base(new Guid(Native.GUID_DEVINTERFACE_VOLUME))
         {
+            StringBuilder sb = new StringBuilder(1024);
             foreach (string drive in Environment.GetLogicalDrives())
             {
-                StringBuilder sb = new StringBuilder(1024);
                 if (Native.GetVolumeNameForVolumeMountPoint(drive, sb, sb.Capacity))
                 {
-                    _logicalDrives[sb.ToString()] = drive.Replace("\\", "");
-                    Trace.WriteLine(drive + " ==> " + sb.ToString());
+                    string volumeName = sb.ToString();
+                    _logicalDrives.Add(volumeName, drive.Replace("\\", ""));
+                    Trace.WriteLine(drive + " ==> " + volumeName);
                 }
             }
         }
