@@ -13,25 +13,13 @@ namespace UsbEject.Library
     /// </summary>
     public class VolumeDeviceClass : DeviceClass
     {
-        internal readonly SortedDictionary<string, string> _logicalDrives = new SortedDictionary<string, string>();
-
         /// <summary>
         /// Initializes a new instance of the VolumeDeviceClass class.
         /// </summary>
         public VolumeDeviceClass()
             : base(new Guid(Native.GUID_DEVINTERFACE_VOLUME))
         {
-            StringBuilder sb = new StringBuilder(1024);
-            foreach (string drive in Environment.GetLogicalDrives())
-            {
-                if (Native.GetVolumeNameForVolumeMountPoint(drive, sb, sb.Capacity))
-                {
-                    string volumeName = sb.ToString();
-                    _logicalDrives.Add(volumeName, drive.Replace("\\", ""));
-                    Trace.WriteLine(drive + " ==> " + volumeName);
-                }
-            }
-
+            _logicalDrives = new Lazy<IDictionary<string, string>>(GetLogicalDrives);
             _volumes = new Lazy<IEnumerable<Volume>>(GetVolumes);
         }
 
@@ -39,6 +27,38 @@ namespace UsbEject.Library
         {
             return new Volume(deviceClass, deviceInfoData, path, index);
         }
+
+        #region LogicalDrives
+
+        private readonly Lazy<IDictionary<string, string>> _logicalDrives;
+
+        internal IDictionary<string, string> LogicalDrives
+        {
+            get
+            {
+                return _logicalDrives.Value;
+            }
+        }
+
+        private static IDictionary<string, string> GetLogicalDrives()
+        {
+            Dictionary<string, string> logicalDrives = new Dictionary<string, string>();
+
+            StringBuilder sb = new StringBuilder(1024);
+            foreach (string drive in Environment.GetLogicalDrives())
+            {
+                if (Native.GetVolumeNameForVolumeMountPoint(drive, sb, sb.Capacity))
+                {
+                    string volumeName = sb.ToString();
+                    logicalDrives.Add(volumeName, drive.Replace("\\", ""));
+                    Trace.WriteLine(drive + " ==> " + volumeName);
+                }
+            }
+
+            return logicalDrives;
+        }
+
+        #endregion
 
         #region Volumes
 

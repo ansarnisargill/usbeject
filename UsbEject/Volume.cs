@@ -71,7 +71,7 @@ namespace UsbEject.Library
             if (VolumeName != null)
             {
                 string logicalDrive;
-                ((VolumeDeviceClass)DeviceClass)._logicalDrives.TryGetValue(VolumeName, out logicalDrive);
+                ((VolumeDeviceClass)DeviceClass).LogicalDrives.TryGetValue(VolumeName, out logicalDrive);
                 return logicalDrive;
             }
 
