@@ -31,11 +31,42 @@ namespace UsbEject.Library
                     Trace.WriteLine(drive + " ==> " + volumeName);
                 }
             }
+
+            _volumes = new Lazy<IEnumerable<Volume>>(GetVolumes);
         }
 
         internal override Device CreateDevice(DeviceClass deviceClass, Native.SP_DEVINFO_DATA deviceInfoData, string path, int index, int disknum = -1)
         {
             return new Volume(deviceClass, deviceInfoData, path, index);
         }
+
+        #region Volumes
+
+        private readonly Lazy<IEnumerable<Volume>> _volumes;
+
+        /// <summary>
+        /// Gets the list of volumes.
+        /// </summary>
+        public IEnumerable<Volume> Volumes
+        {
+            get
+            {
+                return _volumes.Value;
+            }
+        }
+
+        private IEnumerable<Volume> GetVolumes()
+        {
+            List<Volume> volumes = new List<Volume>();
+
+            foreach (Volume volume in Devices)
+            {
+                volumes.Add(volume);
+            }
+
+            return volumes;
+        }
+
+        #endregion
     }
 }
