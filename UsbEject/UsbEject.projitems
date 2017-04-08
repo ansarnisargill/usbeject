@@ -12,6 +12,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\ConsoleLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\DebugLogger.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\NamespaceDoc.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\NullLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\TextLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\TraceLogger.cs" />
@@ -21,6 +22,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)DeviceCapabilities.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DeviceClass.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DiskDeviceClass.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NamespaceDoc.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Native.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ILogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Volume.cs" />
