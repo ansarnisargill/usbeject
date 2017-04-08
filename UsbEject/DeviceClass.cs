@@ -85,9 +85,7 @@ namespace UsbEject.Library
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+        /// <inheritdoc/>
         ~DeviceClass()
         {
             Dispose(false);
