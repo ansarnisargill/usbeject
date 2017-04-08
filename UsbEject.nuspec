@@ -3,14 +3,14 @@
   <metadata>
     <id>UsbEject</id>
     <title>UsbEject</title>
-    <version>1.2.0-alpha</version>
+    <version>1.2.1-alpha</version>
     <authors>Simon Mourier</authors>
     <owners>Dmitry Shechtman</owners>
     <projectUrl>https://github.com/CHDKUtil/usbeject</projectUrl>
     <licenseUrl>https://www.codeproject.com/info/cpol10.aspx</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Safely eject removable storage</description>
-    <releaseNotes>Added loggers.</releaseNotes>
+    <releaseNotes>Added documentation.</releaseNotes>
     <copyright>Copyright © 2006 Simon Mourier</copyright>
     <tags>usb eject usbeject</tags>
   </metadata>
