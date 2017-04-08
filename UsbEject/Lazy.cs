@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if NET20 || NET35
+using System;
 
 namespace UsbEject.Library
 {
@@ -42,3 +43,4 @@ namespace UsbEject.Library
         }
     }
 }
+#endif
