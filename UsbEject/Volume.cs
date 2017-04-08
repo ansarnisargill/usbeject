@@ -17,7 +17,7 @@ namespace UsbEject.Library
         #region Constructors
 
         internal Volume(DeviceClass deviceClass, Native.SP_DEVINFO_DATA deviceInfoData, string path, int index, ILogger logger)
-            : base(deviceClass, deviceInfoData, path, index: index, disknum: -1, logger: logger)
+            : base(deviceClass, deviceInfoData, path, index, logger)
         {
             _volumeName = new Lazy<string>(GetVolumeName);
             _logicalDrive = new Lazy<string>(GetLogicalDrive);
@@ -108,7 +108,7 @@ namespace UsbEject.Library
                 DiskDeviceClass diskClass = new DiskDeviceClass(Logger, false);
                 foreach (int index in DiskNumbers)
                 {
-                    foreach (Device disk in diskClass.Devices)
+                    foreach (Disk disk in diskClass)
                     {
                         if (disk.DiskNumber == index)
                         {

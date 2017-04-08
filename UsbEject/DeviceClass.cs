@@ -57,10 +57,9 @@ namespace UsbEject.Library
         #endregion
 
         #region CreateDevice
-        internal virtual Device CreateDevice(DeviceClass deviceClass, Native.SP_DEVINFO_DATA deviceInfoData, string path, int index, int disknum)
-        {
-            return new Device(deviceClass, deviceInfoData, path, index, disknum, Logger);
-        }
+
+        internal abstract Device CreateDevice(DeviceClass deviceClass, Native.SP_DEVINFO_DATA deviceInfoData, string path, int index, int disknum);
+
         #endregion
 
         #region IDisposable Support

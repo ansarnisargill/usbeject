@@ -33,7 +33,7 @@ namespace UsbEject.Library
 
         internal override Device CreateDevice(DeviceClass deviceClass, Native.SP_DEVINFO_DATA deviceInfoData, string path, int index, int disknum)
         {
-            return new Volume(deviceClass, deviceInfoData, path, index: index, logger: Logger);
+            return new Volume(deviceClass, deviceInfoData, path, index, Logger);
         }
 
         #endregion

@@ -16,7 +16,7 @@ namespace UsbEject.Library
     {
         #region Constructors
 
-        internal Device(DeviceClass deviceClass, Native.SP_DEVINFO_DATA deviceInfoData, string path, int index, int disknum, ILogger logger)
+        internal Device(DeviceClass deviceClass, Native.SP_DEVINFO_DATA deviceInfoData, string path, int index, ILogger logger)
         {
             if (deviceClass == null)
                 throw new ArgumentNullException(nameof(deviceClass));
@@ -28,7 +28,6 @@ namespace UsbEject.Library
             DeviceInfoData = deviceInfoData;
             Path = path; // may be null
             Index = index;
-            DiskNumber = disknum;
             Logger = logger;
 
             _class = new Lazy<string>(GetClass);
@@ -76,16 +75,6 @@ namespace UsbEject.Library
         /// Gets the device's path.
         /// </summary>
         public string Path
-        {
-            get;
-        }
-        #endregion
-
-        #region DiskNumber
-        /// <summary>
-        /// Gets the device's disk number.
-        /// </summary>
-        public int DiskNumber
         {
             get;
         }
@@ -258,7 +247,7 @@ namespace UsbEject.Library
             if (hr == 0)
             {
                 Native.SP_DEVINFO_DATA info = DeviceClass.GetInfo(parentDevInst);
-                return new Device(DeviceClass, info, null, -1, -1, Logger);
+                return new Device(DeviceClass, info, null, -1, Logger);
             }
 
             return null;

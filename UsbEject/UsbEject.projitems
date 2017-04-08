@@ -21,6 +21,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Device.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DeviceCapabilities.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DeviceClass.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Disk.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DiskDeviceClass.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NamespaceDoc.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Native.cs" />
