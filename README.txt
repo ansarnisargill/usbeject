@@ -9,9 +9,15 @@ Usage
 
 using (VolumeDeviceClass volumes = new VolumeDeviceClass())
 {
-  Volume volume = volumes.Volumes.SingleOrDefault(v => ejectDrive.Equals(v.LogicalDrive));
+  Volume volume = volumes.SingleOrDefault(v => ejectDrive.Equals(v.LogicalDrive));
   volume?.Eject(false);
 }
+
+
+Reference
+---------
+
+https://chdkutil.github.io/UsbEject
 
 
 Notice

@@ -2,6 +2,7 @@
 // written by Simon Mourier <email: simon [underscore] mourier [at] hotmail [dot] com>
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,7 +11,7 @@ namespace UsbEject.Library
     /// <summary>
     /// The device class for volume devices.
     /// </summary>
-    public class VolumeDeviceClass : DeviceClass
+    public class VolumeDeviceClass : DeviceClass, IEnumerable<Volume>
     {
         #region Constructors
 
@@ -92,6 +93,21 @@ namespace UsbEject.Library
 
             return volumes;
         }
+        #endregion
+
+        #region IEnumerable
+
+        /// <inheritdoc/>
+        public new IEnumerator<Volume> GetEnumerator()
+        {
+            return Volumes.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return Volumes.GetEnumerator();
+        }
+
         #endregion
     }
 }
