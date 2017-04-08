@@ -3,7 +3,6 @@
 
 using System;
 using System.ComponentModel;
-using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -13,7 +12,7 @@ namespace UsbEject.Library
     /// <summary>
     /// A generic base class for physical device classes.
     /// </summary>
-    public abstract class DeviceClass : IDisposable, IEnumerable<Device>
+    public abstract class DeviceClass : IDisposable
     {
         #region Fields
 
@@ -333,21 +332,6 @@ namespace UsbEject.Library
             {
                 Marshal.FreeHGlobal(propertyBuffer);
             }
-        }
-
-        #endregion
-
-        #region IEnumerable
-
-        /// <inheritdoc/>
-        public IEnumerator<Device> GetEnumerator()
-        {
-            return Devices.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return Devices.GetEnumerator();
         }
 
         #endregion

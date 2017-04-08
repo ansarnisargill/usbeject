@@ -98,7 +98,7 @@ namespace UsbEject.Library
         #region IEnumerable
 
         /// <inheritdoc/>
-        public new IEnumerator<Volume> GetEnumerator()
+        public IEnumerator<Volume> GetEnumerator()
         {
             return Volumes.GetEnumerator();
         }
