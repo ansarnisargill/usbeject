@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<topic id="e37d3f20-c770-44bf-ba4a-08ee59b06bff" revisionNumber="1">
+	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    
+		<introduction>
+			<para>.NET class library to safely eject removable storage.</para>
+		</introduction>
+
+		<section>
+			<title>Installation</title>
+			<content>
+        <para>
+          Enter the following command into the Package Manager Console:
+        </para>
+        <code language="PowerShell">
+          Install-Package UsbEject -Pre
+        </code>
+			</content>
+		</section>
+
+    <section>
+      <title>Usage</title>
+      <content>
+        <code language="C#">
+using (VolumeDeviceClass volumes = new VolumeDeviceClass())
+{
+  Volume volume = volumes.Volumes.SingleOrDefault(v => ejectDrive.Equals(v.LogicalDrive));
+  volume?.Eject(false);
+}
+        </code>
+      </content>
+    </section>
+
+    <section>
+      <title>Notice</title>
+      <content>
+        <para>Copyright © 2006 Simon Mourier</para>
+
+        <para>THIS WORK IS PROVIDED UNDER THE TERMS OF THE CODE PROJECT OPEN LICENSE.</para>
+
+        <para>THIS WORK IS PROVIDED "AS IS", "WHERE IS" AND "AS AVAILABLE", WITHOUT ANY EXPRESS OR IMPLIED WARRANTIES OR CONDITIONS OR GUARANTEES.
+        YOU, THE USER, ASSUME ALL RISK IN ITS USE, INCLUDING COPYRIGHT INFRINGEMENT, PATENT INFRINGEMENT, SUITABILITY, ETC.
+        AUTHOR EXPRESSLY DISCLAIMS ALL EXPRESS, IMPLIED OR STATUTORY WARRANTIES OR CONDITIONS, INCLUDING WITHOUT LIMITATION, WARRANTIES OR
+        CONDITIONS OF MERCHANTABILITY, MERCHANTABLE QUALITY OR FITNESS FOR A PARTICULAR PURPOSE, OR ANY WARRANTY OF TITLE OR NON-INFRINGEMENT,
+        OR THAT THE WORK (OR ANY PORTION THEREOF) IS CORRECT, USEFUL, BUG-FREE OR FREE OF VIRUSES. YOU MUST PASS THIS DISCLAIMER ON WHENEVER
+        YOU DISTRIBUTE THE WORK OR DERIVATIVE WORKS.</para>
+        
+      </content>
+    </section>
+    
+    <relatedTopics>
+      <externalLink>
+        <linkUri>https://github.com/CHDKUtil/usbeject</linkUri>
+        <linkText>UsbEject on GitHub</linkText>
+      </externalLink>
+      <externalLink>
+        <linkUri>https://www.nuget.org/packages/UsbEject</linkUri>
+        <linkText>UsbEject on NuGet Gallery</linkText>
+      </externalLink>
+    </relatedTopics>
+
+  </developerConceptualDocument>
+</topic>

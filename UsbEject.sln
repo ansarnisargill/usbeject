@@ -19,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		UsbEject.nuspec = UsbEject.nuspec
 	EndProjectSection
 EndProject
+Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Documentation", "Documentation\Documentation.shfbproj", "{8FAE7A03-01E2-4AC6-B8EB-EA28ACA868AC}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		UsbEject\UsbEject.projitems*{03345201-6908-4fde-9867-a20f8a461a7f}*SharedItemsImports = 4
@@ -47,6 +49,8 @@ Global
 		{FFA0ABFC-24FE-4C9A-A5EF-35D783291AE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFA0ABFC-24FE-4C9A-A5EF-35D783291AE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFA0ABFC-24FE-4C9A-A5EF-35D783291AE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FAE7A03-01E2-4AC6-B8EB-EA28ACA868AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FAE7A03-01E2-4AC6-B8EB-EA28ACA868AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
