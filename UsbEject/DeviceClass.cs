@@ -4,7 +4,6 @@
 using System;
 using System.ComponentModel;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -27,8 +26,10 @@ namespace UsbEject.Library
         /// Initializes a new instance of the DeviceClass class.
         /// </summary>
         /// <param name="classGuid">A device class Guid.</param>
-        protected DeviceClass(Guid classGuid)
-            : this(classGuid, IntPtr.Zero)
+        /// <param name="logger">Logger.</param>
+        /// <param name="loggerOwner">Indicates whether the device class instance owns <paramref name="logger"/>.</param>
+        protected DeviceClass(Guid classGuid, ILogger logger, bool loggerOwner)
+            : this(classGuid, IntPtr.Zero, logger, loggerOwner)
         {
         }
 
@@ -37,7 +38,9 @@ namespace UsbEject.Library
         /// </summary>
         /// <param name="classGuid">A device class Guid.</param>
         /// <param name="hwndParent">The handle of the top-level window to be used for any user interface or IntPtr.Zero for no handle.</param>
-		protected DeviceClass(Guid classGuid, IntPtr hwndParent)
+        /// <param name="logger">Logger.</param>
+        /// <param name="loggerOwner">Indicates whether the device class instance owns <paramref name="logger"/>.</param>
+		protected DeviceClass(Guid classGuid, IntPtr hwndParent, ILogger logger, bool loggerOwner)
         {
             _classGuid = classGuid;
 
@@ -45,15 +48,18 @@ namespace UsbEject.Library
             if (_deviceInfoSet == (IntPtr)Native.INVALID_HANDLE_VALUE)
                 throw new Win32Exception(Marshal.GetLastWin32Error());
 
+            Logger = logger ?? Logging.NullLogger.Instance;
+            LoggerOwner = loggerOwner;
+
             _devices = new Lazy<List<Device>>(GetDevices);
         }
 
         #endregion
 
         #region CreateDevice
-        internal virtual Device CreateDevice(DeviceClass deviceClass, Native.SP_DEVINFO_DATA deviceInfoData, string path, int index, int disknum = -1)
+        internal virtual Device CreateDevice(DeviceClass deviceClass, Native.SP_DEVINFO_DATA deviceInfoData, string path, int index, int disknum)
         {
-            return new Device(deviceClass, deviceInfoData, path, index, disknum);
+            return new Device(deviceClass, deviceInfoData, path, index, disknum, Logger);
         }
         #endregion
 
@@ -69,6 +75,13 @@ namespace UsbEject.Library
             {
                 Native.SetupDiDestroyDeviceInfoList(_deviceInfoSet);
                 _deviceInfoSet = IntPtr.Zero;
+            }
+
+            if (Logger != null)
+            {
+                if (LoggerOwner)
+                    Logger.Dispose();
+                Logger = null;
             }
         }
 
@@ -103,6 +116,21 @@ namespace UsbEject.Library
             {
                 return _classGuid;
             }
+        }
+        #endregion
+
+        #region Logger
+        internal ILogger Logger
+        {
+            get;
+            private set;
+        }
+        #endregion
+
+        #region LoggerOwner
+        private bool LoggerOwner
+        {
+            get;
         }
         #endregion
 
@@ -184,12 +212,12 @@ namespace UsbEject.Library
                         {
                             if (!Native.DeviceIoControl(hFile, Native.IOCTL_STORAGE_GET_DEVICE_NUMBER, IntPtr.Zero, 0, numBuffer, numBufSize, out bytesReturned, IntPtr.Zero))
                             {
-                                Trace.WriteLine("IOCTL failed.");
+                                Logger.Write("IOCTL failed.");
                             }
                         }
                         catch (Exception ex)
                         {
-                            Trace.WriteLine("Exception calling ioctl: " + ex);
+                            Logger.Write("Exception calling ioctl: {0}", ex);
                         }
                         finally
                         {
@@ -199,9 +227,9 @@ namespace UsbEject.Library
                         if (bytesReturned > 0)
                             disknum = (Native.STORAGE_DEVICE_NUMBER)Marshal.PtrToStructure(numBuffer, typeof(Native.STORAGE_DEVICE_NUMBER));
                         else
-                            disknum = new Native.STORAGE_DEVICE_NUMBER() { DeviceNumber = -1, DeviceType = -1, PartitionNumber = -1 };
+                            disknum = new Native.STORAGE_DEVICE_NUMBER { DeviceNumber = -1, DeviceType = -1, PartitionNumber = -1 };
 
-                        Device device = CreateDevice(this, devData, devicePath, index, disknum.DeviceNumber);
+                        Device device = CreateDevice(this, devData, devicePath, index: index, disknum: disknum.DeviceNumber);
                         devices.Add(device);
                     }
                     finally
@@ -211,7 +239,7 @@ namespace UsbEject.Library
                 }
                 else
                 {
-                    Device device = CreateDevice(this, devData, devicePath, index);
+                    Device device = CreateDevice(this, devData, devicePath, index: index, disknum: -1);
                     devices.Add(device);
                 }
 

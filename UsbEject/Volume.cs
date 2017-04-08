@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -17,8 +16,8 @@ namespace UsbEject.Library
     {
         #region Constructors
 
-        internal Volume(DeviceClass deviceClass, Native.SP_DEVINFO_DATA deviceInfoData, string path, int index)
-            : base(deviceClass, deviceInfoData, path, index)
+        internal Volume(DeviceClass deviceClass, Native.SP_DEVINFO_DATA deviceInfoData, string path, int index, ILogger logger)
+            : base(deviceClass, deviceInfoData, path, index: index, disknum: -1, logger: logger)
         {
             _volumeName = new Lazy<string>(GetVolumeName);
             _logicalDrive = new Lazy<string>(GetLogicalDrive);
@@ -106,7 +105,7 @@ namespace UsbEject.Library
 
             if (DiskNumbers != null)
             {
-                DiskDeviceClass diskClass = new DiskDeviceClass();
+                DiskDeviceClass diskClass = new DiskDeviceClass(Logger, false);
                 foreach (int index in DiskNumbers)
                 {
                     foreach (Device disk in diskClass.Devices)
@@ -142,7 +141,7 @@ namespace UsbEject.Library
             List<int> numbers = new List<int>();
             if (LogicalDrive != null)
             {
-                Trace.WriteLine("Finding disk extents for volume: " + LogicalDrive);
+                Logger.Write("Finding disk extents for volume: {0}", LogicalDrive);
                 IntPtr hFile = Native.CreateFile(@"\\.\" + LogicalDrive, 0, Native.FILE_SHARE_READ | Native.FILE_SHARE_WRITE, IntPtr.Zero, Native.OPEN_EXISTING, 0, IntPtr.Zero);
                 if (hFile == (IntPtr)Native.INVALID_HANDLE_VALUE)
                     throw new Win32Exception(Marshal.GetLastWin32Error());

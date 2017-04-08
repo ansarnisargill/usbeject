@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Text;
 
 namespace UsbEject.Library
@@ -18,8 +17,10 @@ namespace UsbEject.Library
         /// <summary>
         /// Initializes a new instance of the VolumeDeviceClass class.
         /// </summary>
-        public VolumeDeviceClass()
-            : base(new Guid(Native.GUID_DEVINTERFACE_VOLUME))
+        /// <param name="logger">Logger.</param>
+        /// <param name="loggerOwner">Indicates whether the device class instance owns <paramref name="logger"/>.</param>
+        public VolumeDeviceClass(ILogger logger = null, bool loggerOwner = false)
+            : base(new Guid(Native.GUID_DEVINTERFACE_VOLUME), logger, loggerOwner)
         {
             _logicalDrives = new Lazy<IDictionary<string, string>>(GetLogicalDrives);
             _volumes = new Lazy<IEnumerable<Volume>>(GetVolumes);
@@ -29,9 +30,9 @@ namespace UsbEject.Library
 
         #region Member Overrides
 
-        internal override Device CreateDevice(DeviceClass deviceClass, Native.SP_DEVINFO_DATA deviceInfoData, string path, int index, int disknum = -1)
+        internal override Device CreateDevice(DeviceClass deviceClass, Native.SP_DEVINFO_DATA deviceInfoData, string path, int index, int disknum)
         {
-            return new Volume(deviceClass, deviceInfoData, path, index);
+            return new Volume(deviceClass, deviceInfoData, path, index: index, logger: Logger);
         }
 
         #endregion
@@ -47,7 +48,7 @@ namespace UsbEject.Library
             }
         }
 
-        private static IDictionary<string, string> GetLogicalDrives()
+        private IDictionary<string, string> GetLogicalDrives()
         {
             Dictionary<string, string> logicalDrives = new Dictionary<string, string>();
 
@@ -58,7 +59,7 @@ namespace UsbEject.Library
                 {
                     string volumeName = sb.ToString();
                     logicalDrives.Add(volumeName, drive.Replace("\\", ""));
-                    Trace.WriteLine(drive + " ==> " + volumeName);
+                    Logger.Write("{0} ==> {1}", drive, volumeName);
                 }
             }
 
