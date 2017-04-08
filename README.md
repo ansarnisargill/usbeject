@@ -1,15 +1,20 @@
 usbeject
 ========
 
-Safely eject removable storage
+.NET class library to safely eject removable storage.
 
-This is a class library of code taken from a [CodeProject article](https://www.codeproject.com/Articles/13530/Eject-USB-disks-using-C)
+
+Details
+-------
+
+Code taken from a [CodeProject article](https://www.codeproject.com/Articles/13530/Eject-USB-disks-using-C)
 with the following modifications/additions:
 
 * Fixed a bug where it wasn't ejecting the drive it claimed to be ejecting (@mthiffau)
 * Added AnyCPU support (@zergmk2)
 * Built for .NET 2.0, 3.5 and 4.0 in addition to .NET 4.5
 * Simplified usage
+* Added logging abstraction
 * Implemented thread-safe properties
 * Implemented Disposable pattern
 * Fixed minor bugs
