@@ -53,7 +53,7 @@ namespace UsbEject.Library
         {
             Dictionary<string, string> logicalDrives = new Dictionary<string, string>();
 
-            StringBuilder sb = new StringBuilder(1024);
+            StringBuilder sb = new StringBuilder(Native.CM_BUFFER_SIZE);
             foreach (string drive in Environment.GetLogicalDrives())
             {
                 if (Native.GetVolumeNameForVolumeMountPoint(drive, sb, sb.Capacity))

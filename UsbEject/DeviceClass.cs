@@ -229,7 +229,7 @@ namespace UsbEject.Library
 
         internal Native.SP_DEVINFO_DATA GetInfo(uint dnDevInst)
         {
-            StringBuilder sb = new StringBuilder(1024);
+            StringBuilder sb = new StringBuilder(Native.CM_BUFFER_SIZE);
             int hr = Native.CM_Get_Device_ID(dnDevInst, sb, sb.Capacity, 0);
             if (hr != 0)
                 throw new Win32Exception(hr);
@@ -249,7 +249,7 @@ namespace UsbEject.Library
 
             int propertyRegDataType = 0;
             int requiredSize;
-            int propertyBufferSize = 1024;
+            int propertyBufferSize = Native.PROPERTY_BUFFER_SIZE;
 
             IntPtr propertyBuffer = Marshal.AllocHGlobal(propertyBufferSize);
             try

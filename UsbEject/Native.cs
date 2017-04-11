@@ -10,9 +10,6 @@ namespace UsbEject.Library
 {
     internal static class Native
     {
-        // from winuser.h
-        internal const int WM_DEVICECHANGE = 0x0219;
-
         // from winbase.h
         internal const int INVALID_HANDLE_VALUE = -1;
         internal const int FILE_SHARE_READ = 0x00000001;
@@ -79,6 +76,8 @@ namespace UsbEject.Library
             LegacyDriver,
         }
 
+        internal const int CM_BUFFER_SIZE = 1024;
+
         // from cfgmgr32.h
         [DllImport("setupapi.dll")]
         internal static extern int CM_Get_Parent(
@@ -120,6 +119,8 @@ namespace UsbEject.Library
         internal const int SPDRP_CLASS = 0x00000007;
         internal const int SPDRP_CLASSGUID = 0x00000008;
         internal const int SPDRP_FRIENDLYNAME = 0x0000000C;
+
+        internal const int PROPERTY_BUFFER_SIZE = 1024;
 
         [StructLayout(LayoutKind.Sequential)]
         internal class SP_DEVINFO_DATA

@@ -44,7 +44,7 @@ namespace UsbEject.Library
 
         private string GetVolumeName()
         {
-            StringBuilder sb = new StringBuilder(1024);
+            StringBuilder sb = new StringBuilder(Native.CM_BUFFER_SIZE);
             if (!Native.GetVolumeNameForVolumeMountPoint(Path + "\\", sb, sb.Capacity))
             {
                 // throw new Win32Exception(Marshal.GetLastWin32Error());

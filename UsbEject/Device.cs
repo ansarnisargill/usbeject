@@ -294,6 +294,7 @@ namespace UsbEject.Library
         /// <returns>null if no error occured, otherwise a contextual text.</returns>
         public string Eject(bool allowUI)
         {
+            StringBuilder sb = new StringBuilder(Native.CM_BUFFER_SIZE);
             foreach (Device device in RemovableDevices)
             {
                 if (allowUI)
@@ -303,8 +304,6 @@ namespace UsbEject.Library
                 }
                 else
                 {
-                    StringBuilder sb = new StringBuilder(1024);
-
                     Native.PNP_VETO_TYPE veto;
                     int hr = Native.CM_Request_Device_Eject(device.InstanceHandle, out veto, sb, sb.Capacity, 0);
                     if (hr != 0)
@@ -313,8 +312,8 @@ namespace UsbEject.Library
                     if (veto != Native.PNP_VETO_TYPE.Ok)
                         return veto.ToString();
                 }
-
             }
+
             return null;
         }
         #endregion
