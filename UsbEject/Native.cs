@@ -1,6 +1,7 @@
 // UsbEject version 1.0 March 2006
 // written by Simon Mourier <email: simon [underscore] mourier [at] hotmail [dot] com>
 
+using Microsoft.Win32.SafeHandles;
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -14,10 +15,11 @@ namespace UsbEject.Library
 
         // from winbase.h
         internal const int INVALID_HANDLE_VALUE = -1;
-        internal const int GENERIC_READ = unchecked((int)0x80000000);
         internal const int FILE_SHARE_READ = 0x00000001;
         internal const int FILE_SHARE_WRITE = 0x00000002;
         internal const int OPEN_EXISTING = 3;
+
+        internal const int IOCTL_BUFFER_SIZE = 1024;
 
         [DllImport("Kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
         internal static extern bool GetVolumeNameForVolumeMountPoint(
@@ -26,13 +28,10 @@ namespace UsbEject.Library
             int uniqueNameBufferCapacity);
 
         [DllImport("Kernel32.dll", SetLastError = true)]
-        internal static extern IntPtr CreateFile(string lpFileName, int dwDesiredAccess, int dwShareMode, IntPtr lpSecurityAttributes, int dwCreationDisposition, int dwFlagsAndAttributes, IntPtr hTemplateFile);
+        internal static extern SafeFileHandle CreateFile(string lpFileName, int dwDesiredAccess, int dwShareMode, IntPtr lpSecurityAttributes, int dwCreationDisposition, int dwFlagsAndAttributes, IntPtr hTemplateFile);
 
         [DllImport("Kernel32.dll", SetLastError = true)]
-        internal static extern bool DeviceIoControl(IntPtr hDevice, int dwIoControlCode, IntPtr lpInBuffer, int nInBufferSize, IntPtr lpOutBuffer, int nOutBufferSize, out int lpBytesReturned, IntPtr lpOverlapped);
-
-        [DllImport("Kernel32.dll", SetLastError = true)]
-        internal static extern bool CloseHandle(IntPtr hObject);
+        internal static extern bool DeviceIoControl(SafeFileHandle hDevice, int dwIoControlCode, IntPtr lpInBuffer, int nInBufferSize, IntPtr lpOutBuffer, int nOutBufferSize, out int lpBytesReturned, IntPtr lpOverlapped);
 
         // from winerror.h
         internal const int ERROR_NO_MORE_ITEMS = 259;

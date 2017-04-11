@@ -1,6 +1,7 @@
 // UsbEject version 1.0 March 2006
 // written by Simon Mourier <email: simon [underscore] mourier [at] hotmail [dot] com>
 
+using Microsoft.Win32.SafeHandles;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -39,39 +40,37 @@ namespace UsbEject.Library
         internal override Native.STORAGE_DEVICE_NUMBER GetDiskNumber(string devicePath)
         {
             // Find disks
-            IntPtr hFile = Native.CreateFile(devicePath, 0, Native.FILE_SHARE_READ | Native.FILE_SHARE_WRITE, IntPtr.Zero, Native.OPEN_EXISTING, 0, IntPtr.Zero);
-            if (hFile == (IntPtr)Native.INVALID_HANDLE_VALUE)
-                throw new Win32Exception(Marshal.GetLastWin32Error());
-
-            int size = 0x400; // some big size
-            IntPtr buffer = Marshal.AllocHGlobal(size);
-            try
+            using (SafeFileHandle hFile = Native.CreateFile(devicePath, 0, Native.FILE_SHARE_READ | Native.FILE_SHARE_WRITE, IntPtr.Zero, Native.OPEN_EXISTING, 0, IntPtr.Zero))
             {
-                int bytesReturned = 0;
+                if (hFile.IsInvalid)
+                    throw new Win32Exception(Marshal.GetLastWin32Error());
+
+                int size = Native.IOCTL_BUFFER_SIZE;
+                IntPtr buffer = Marshal.AllocHGlobal(size);
                 try
                 {
-                    if (!Native.DeviceIoControl(hFile, Native.IOCTL_STORAGE_GET_DEVICE_NUMBER, IntPtr.Zero, 0, buffer, size, out bytesReturned, IntPtr.Zero))
+                    int bytesReturned = 0;
+                    try
                     {
-                        Logger.Write("IOCTL failed.");
+                        if (!Native.DeviceIoControl(hFile, Native.IOCTL_STORAGE_GET_DEVICE_NUMBER, IntPtr.Zero, 0, buffer, size, out bytesReturned, IntPtr.Zero))
+                        {
+                            Logger.Write("IOCTL failed.");
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    Logger.Write("Exception calling IOCTL: {0}", ex);
+                    catch (Exception ex)
+                    {
+                        Logger.Write("Exception calling IOCTL: {0}", ex);
+                    }
+
+                    if (bytesReturned > 0)
+                    {
+                        return (Native.STORAGE_DEVICE_NUMBER)Marshal.PtrToStructure(buffer, typeof(Native.STORAGE_DEVICE_NUMBER));
+                    }
                 }
                 finally
                 {
-                    Native.CloseHandle(hFile);
+                    Marshal.FreeHGlobal(buffer);
                 }
-
-                if (bytesReturned > 0)
-                {
-                    return (Native.STORAGE_DEVICE_NUMBER)Marshal.PtrToStructure(buffer, typeof(Native.STORAGE_DEVICE_NUMBER));
-                }
-            }
-            finally
-            {
-                Marshal.FreeHGlobal(buffer);
             }
 
             return base.GetDiskNumber(devicePath);
