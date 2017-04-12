@@ -1,67 +1,50 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace UsbEject.Library.Logging
 {
     /// <summary>
     /// A logger implementation using <see cref="Trace"/>.
     /// </summary>
-    public sealed class TraceLogger : ILogger
+    public sealed class TraceLogger : TraceLoggerBase
     {
-        #region Fields
-
-        private readonly string _category;
-        
-        #endregion
-
         #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TraceLogger"/> class.
         /// </summary>
+        /// <param name="level">Minimum log level.</param>
         /// <param name="category">Trace category.</param>
-        public TraceLogger(string category = null)
+        public TraceLogger(LogLevel level, string category = null)
+            : base(level, category)
         {
-            _category = category;
         }
 
         #endregion
 
-        #region ILogger Members
+        #region Member Overrides
 
-        void IDisposable.Dispose()
+        /// <inheritdoc/>
+        protected override void WriteLineIf(bool condition, object value, string category)
         {
-            //Do nothing
+            Trace.WriteLineIf(condition, value, category);
         }
 
         /// <inheritdoc/>
-        public void Write(object obj)
+        protected override void WriteLineIf(bool condition, object value)
         {
-            if (_category != null)
-                Trace.WriteLine(obj, _category);
-            else
-                Trace.WriteLine(obj);
+            Trace.WriteLineIf(condition, value);
         }
 
         /// <inheritdoc/>
-        public void Write(string str)
+        protected override void WriteLineIf(bool condition, string message, string category)
         {
-            if (_category != null)
-                Trace.WriteLine(str, _category);
-            else
-                Trace.WriteLine(str);
+            Trace.WriteLineIf(condition, message, category);
         }
 
         /// <inheritdoc/>
-        public void Write(string format, object arg0)
+        protected override void WriteLineIf(bool condition, string message)
         {
-            Write(string.Format(format, arg0));
-        }
-
-        /// <inheritdoc/>
-        public void Write(string format, object[] args)
-        {
-            Write(string.Format(format, args));
+            Trace.WriteLineIf(condition, message);
         }
 
         #endregion

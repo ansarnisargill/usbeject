@@ -7,15 +7,14 @@ namespace UsbEject.Library.Logging
     /// </summary>
     public sealed class ConsoleLogger : TextLogger
     {
-        #region Singleton
+        #region Constructor
 
         /// <summary>
-        /// Console logger instance.
+        /// Initializes a new instance of the <see cref="ConsoleLogger"/> class.
         /// </summary>
-        public static readonly ConsoleLogger Instance = new ConsoleLogger();
-
-        private ConsoleLogger()
-            : base(Console.Out, false)
+        /// <param name="level">Minimum log level.</param>
+        public ConsoleLogger(LogLevel level)
+            : base(level, Console.Out, false)
         {
         }
 

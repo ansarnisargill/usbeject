@@ -16,6 +16,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Logging\NullLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\TextLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\TraceLogger.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\TraceLoggerBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Func.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lazy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Device.cs" />
@@ -23,6 +24,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)DeviceClass.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Disk.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DiskDeviceClass.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)LogLevel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NamespaceDoc.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Native.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ILogger.cs" />

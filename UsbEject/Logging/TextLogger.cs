@@ -10,6 +10,7 @@ namespace UsbEject.Library.Logging
     {
         #region Fields
 
+        private readonly LogLevel _level;
         private TextWriter _writer;
         private readonly bool _writerOwner;
 
@@ -20,15 +21,17 @@ namespace UsbEject.Library.Logging
         /// <summary>
         /// Initializes a new instance of the <see cref="TextLogger"/> class.
         /// </summary>
+        /// <param name="level">Minimum log level.</param>
         /// <param name="writer">Text writer.</param>
         /// <param name="writerOwner">Indicates whether the logger instance owns <paramref name="writer"/>.</param>
-        public TextLogger(TextWriter writer, bool writerOwner)
+        public TextLogger(LogLevel level, TextWriter writer, bool writerOwner)
         {
             if (writer == null)
                 throw new ArgumentNullException(nameof(writer));
 
             _writer = writer;
             _writerOwner = writerOwner;
+            _level = level;
         }
 
         #endregion
@@ -53,27 +56,31 @@ namespace UsbEject.Library.Logging
         #region ILogger Members
 
         /// <inheritdoc/>
-        public void Write(object obj)
+        public void Write(LogLevel level, object obj)
         {
-            _writer.WriteLine(obj);
+            if (level >= _level)
+                _writer.WriteLine(obj);
         }
 
         /// <inheritdoc/>
-        public void Write(string str)
+        public void Write(LogLevel level, string str)
         {
-            _writer.WriteLine(str);
+            if (level >= _level)
+                _writer.WriteLine(str);
         }
 
         /// <inheritdoc/>
-        public void Write(string format, object arg0)
+        public void Write(LogLevel level, string format, object arg0)
         {
-            _writer.Write(format, arg0);
+            if (level >= _level)
+                _writer.Write(format, arg0);
         }
 
         /// <inheritdoc/>
-        public void Write(string format, object[] args)
+        public void Write(LogLevel level, string format, object[] args)
         {
-            _writer.Write(format, args);
+            if (level >= _level)
+                _writer.Write(format, args);
         }
 
         #endregion

@@ -39,6 +39,8 @@ namespace UsbEject.Library
 
         internal override Native.STORAGE_DEVICE_NUMBER GetDiskNumber(string devicePath)
         {
+            Logger.Write(LogLevel.Verbose, "Finding device number for volume: {0}", devicePath);
+
             // Find disks
             using (SafeFileHandle hFile = Native.CreateFile(devicePath, 0, Native.FILE_SHARE_READ | Native.FILE_SHARE_WRITE, IntPtr.Zero, Native.OPEN_EXISTING, 0, IntPtr.Zero))
             {
@@ -54,12 +56,12 @@ namespace UsbEject.Library
                     {
                         if (!Native.DeviceIoControl(hFile, Native.IOCTL_STORAGE_GET_DEVICE_NUMBER, IntPtr.Zero, 0, buffer, size, out bytesReturned, IntPtr.Zero))
                         {
-                            Logger.Write("IOCTL failed.");
+                            Logger.Write(LogLevel.Warning, "IOCTL failed.");
                         }
                     }
                     catch (Exception ex)
                     {
-                        Logger.Write("Exception calling IOCTL: {0}", ex);
+                        Logger.Write(LogLevel.Error, "Exception calling IOCTL: {0}", ex);
                     }
 
                     if (bytesReturned > 0)
