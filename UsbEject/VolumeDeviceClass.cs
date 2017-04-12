@@ -60,7 +60,7 @@ namespace UsbEject.Library
                 {
                     string volumeName = sb.ToString();
                     logicalDrives.Add(volumeName, drive.Replace("\\", ""));
-                    Logger.Write(LogLevel.Debug, "{0} ==> {1}", drive, volumeName);
+                    Logger.Write(LogLevel.Trace, "{0} ==> {1}", drive, volumeName);
                 }
             }
 

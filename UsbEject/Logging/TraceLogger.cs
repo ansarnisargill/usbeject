@@ -10,7 +10,7 @@ namespace UsbEject.Library.Logging
         /// <summary>
         /// Default <see cref="TraceLogger"/> instance.
         /// </summary>
-        public static readonly TraceLogger Default = new TraceLogger(LogLevel.Trace, null);
+        public static readonly TraceLogger Default = new TraceLogger(LogLevel.Trace, "UsbEject");
 
         #region Constructor
 
@@ -19,7 +19,7 @@ namespace UsbEject.Library.Logging
         /// </summary>
         /// <param name="level">Minimum log level.</param>
         /// <param name="category">Trace category.</param>
-        public TraceLogger(LogLevel level, string category = null)
+        public TraceLogger(LogLevel level, string category)
             : base(level, category)
         {
         }

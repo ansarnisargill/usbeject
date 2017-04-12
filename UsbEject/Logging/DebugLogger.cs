@@ -10,7 +10,7 @@ namespace UsbEject.Library.Logging
         /// <summary>
         /// Default <see cref="DebugLogger"/> instance.
         /// </summary>
-        public static readonly DebugLogger Default = new DebugLogger(LogLevel.Debug, null);
+        public static readonly DebugLogger Default = new DebugLogger(LogLevel.Debug, "UsbEject");
 
         #region Constructor
 
@@ -19,7 +19,7 @@ namespace UsbEject.Library.Logging
         /// </summary>
         /// <param name="level">Minimum log level.</param>
         /// <param name="category">Debug category.</param>
-        public DebugLogger(LogLevel level, string category = null)
+        public DebugLogger(LogLevel level, string category)
             : base(level, category)
         {
         }
