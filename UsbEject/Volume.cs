@@ -4,7 +4,6 @@
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -47,7 +46,9 @@ namespace UsbEject.Library
             StringBuilder sb = new StringBuilder(Native.CM_BUFFER_SIZE);
             if (!Native.GetVolumeNameForVolumeMountPoint(Path + "\\", sb, sb.Capacity))
             {
-                // throw new Win32Exception(Marshal.GetLastWin32Error());
+                Exception ex = Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error());
+                Logger.Write(LogLevel.Error, ex);
+                //throw ex;
             }
 
             if (sb.Length > 0)
@@ -143,11 +144,16 @@ namespace UsbEject.Library
             if (LogicalDrive != null)
             {
                 Logger.Write(LogLevel.Verbose, "Finding disk extents for volume: {0}", LogicalDrive);
-                using (SafeFileHandle hFile = Native.CreateFile(@"\\.\" + LogicalDrive, 0, Native.FILE_SHARE_READ | Native.FILE_SHARE_WRITE, IntPtr.Zero, Native.OPEN_EXISTING, 0, IntPtr.Zero))
+                SafeFileHandle hFile = Native.CreateFile(@"\\.\" + LogicalDrive, 0, Native.FILE_SHARE_READ | Native.FILE_SHARE_WRITE, IntPtr.Zero, Native.OPEN_EXISTING, 0, IntPtr.Zero);
+                if (hFile.IsInvalid)
                 {
-                    if (hFile.IsInvalid)
-                        throw new Win32Exception(Marshal.GetLastWin32Error());
+                    Exception ex = Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error());
+                    Logger.Write(LogLevel.Error, ex);
+                    throw ex;
+                }
 
+                using (hFile)
+                {
                     int size = Native.IOCTL_BUFFER_SIZE;
                     IntPtr buffer = Marshal.AllocHGlobal(size);
                     try

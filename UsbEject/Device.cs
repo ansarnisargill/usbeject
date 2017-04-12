@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace UsbEject.Library
@@ -287,6 +288,7 @@ namespace UsbEject.Library
         #endregion
 
         #region Eject
+
         /// <summary>
         /// Ejects the device.
         /// </summary>
@@ -294,28 +296,56 @@ namespace UsbEject.Library
         /// <returns>null if no error occured, otherwise a contextual text.</returns>
         public string Eject(bool allowUI)
         {
+            if (allowUI)
+            {
+                EjectNoUI();
+                return null;
+            }
+
+            return Eject();
+        }
+
+        private void EjectNoUI()
+        {
+            foreach (Device device in RemovableDevices)
+            {
+                int hr = Native.CM_Request_Device_Eject_NoUi(device.InstanceHandle, IntPtr.Zero, null, 0, 0);
+                if (hr != 0)
+                {
+                    Exception ex = Marshal.GetExceptionForHR(hr);
+                    Logger.Write(LogLevel.Error, "Error ejecting {0}: {1}", device.InstanceHandle, ex);
+                    // don't throw exceptions, there should be a UI for this
+                }
+            }
+        }
+
+        private string Eject()
+        {
             StringBuilder sb = new StringBuilder(Native.CM_BUFFER_SIZE);
             foreach (Device device in RemovableDevices)
             {
-                if (allowUI)
+                Native.PNP_VETO_TYPE veto;
+                int hr = Native.CM_Request_Device_Eject(device.InstanceHandle, out veto, sb, sb.Capacity, 0);
+                if (hr != 0)
                 {
-                    Native.CM_Request_Device_Eject_NoUi(device.InstanceHandle, IntPtr.Zero, null, 0, 0);
-                    // don't handle errors, there should be a UI for this
+                    Exception ex = Marshal.GetExceptionForHR(hr);
+                    Logger.Write(LogLevel.Error, "Error ejecting {0}: {1}", device.InstanceHandle, ex);
+                    throw ex;
                 }
-                else
-                {
-                    Native.PNP_VETO_TYPE veto;
-                    int hr = Native.CM_Request_Device_Eject(device.InstanceHandle, out veto, sb, sb.Capacity, 0);
-                    if (hr != 0)
-                        throw new Win32Exception(hr);
 
-                    if (veto != Native.PNP_VETO_TYPE.Ok)
-                        return veto.ToString();
+                if (veto != Native.PNP_VETO_TYPE.Ok)
+                {
+                    if (sb.Length > 0)
+                        Logger.Write(LogLevel.Warning, "Vetoed ejecting {0}: {1} (2)", device.InstanceHandle, veto, sb.ToString());
+                    else
+                        Logger.Write(LogLevel.Warning, "Vetoed ejecting {0}: {1}", device.InstanceHandle, veto);
+                    return veto.ToString();
                 }
             }
 
             return null;
         }
+
         #endregion
 
         #region Member Overrides

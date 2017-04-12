@@ -2,7 +2,6 @@
 // written by Simon Mourier <email: simon [underscore] mourier [at] hotmail [dot] com>
 
 using System;
-using System.ComponentModel;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -44,12 +43,16 @@ namespace UsbEject.Library
         {
             _classGuid = classGuid;
 
-            _deviceInfoSet = Native.SetupDiGetClassDevs(ref _classGuid, 0, hwndParent, Native.DIGCF_DEVICEINTERFACE | Native.DIGCF_PRESENT);
-            if (_deviceInfoSet == (IntPtr)Native.INVALID_HANDLE_VALUE)
-                throw new Win32Exception(Marshal.GetLastWin32Error());
-
             Logger = logger ?? Logging.NullLogger.Instance;
             LoggerOwner = loggerOwner;
+
+            _deviceInfoSet = Native.SetupDiGetClassDevs(ref _classGuid, 0, hwndParent, Native.DIGCF_DEVICEINTERFACE | Native.DIGCF_PRESENT);
+            if (_deviceInfoSet == (IntPtr)Native.INVALID_HANDLE_VALUE)
+            {
+                Exception ex = Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error());
+                Logger.Write(LogLevel.Error, ex);
+                throw ex;
+            }
 
             _devices = new Lazy<List<Device>>(GetDevices);
         }
@@ -173,7 +176,11 @@ namespace UsbEject.Library
             {
                 int error = Marshal.GetLastWin32Error();
                 if (error != Native.ERROR_NO_MORE_ITEMS)
-                    throw new Win32Exception(error);
+                {
+                    Exception ex = Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error());
+                    Logger.Write(LogLevel.Error, ex);
+                    throw ex;
+                }
                 return null;
             }
 
@@ -189,7 +196,11 @@ namespace UsbEject.Library
             {
                 int error = Marshal.GetLastWin32Error();
                 if (error != Native.ERROR_INSUFFICIENT_BUFFER)
-                    throw new Win32Exception(error);
+                {
+                    Exception ex = Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error());
+                    Logger.Write(LogLevel.Error, ex);
+                    throw ex;
+                }
             }
 
             return devData;
@@ -205,7 +216,11 @@ namespace UsbEject.Library
                 Marshal.StructureToPtr(detailData, buffer, false);
 
                 if (!Native.SetupDiGetDeviceInterfaceDetail(_deviceInfoSet, interfaceData, buffer, size, ref size, devData))
-                    throw new Win32Exception(Marshal.GetLastWin32Error());
+                {
+                    Exception ex = Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error());
+                    Logger.Write(LogLevel.Error, ex);
+                    throw ex;
+                }
 
                 IntPtr pDevicePath = (IntPtr)((int)buffer + Marshal.SizeOf(typeof(int)));
                 return Marshal.PtrToStringAuto(pDevicePath);
@@ -230,12 +245,20 @@ namespace UsbEject.Library
             StringBuilder sb = new StringBuilder(Native.CM_BUFFER_SIZE);
             int hr = Native.CM_Get_Device_ID(dnDevInst, sb, sb.Capacity, 0);
             if (hr != 0)
-                throw new Win32Exception(hr);
+            {
+                Exception ex = Marshal.GetExceptionForHR(hr);
+                Logger.Write(LogLevel.Error, ex);
+                throw ex;
+            }
 
             Native.SP_DEVINFO_DATA devData = new Native.SP_DEVINFO_DATA();
             devData.cbSize = (uint)Marshal.SizeOf(devData);
             if (!Native.SetupDiOpenDeviceInfo(_deviceInfoSet, sb.ToString(), IntPtr.Zero, 0, devData))
-                throw new Win32Exception(Marshal.GetLastWin32Error());
+            {
+                Exception ex = Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error());
+                Logger.Write(LogLevel.Error, ex);
+                throw ex;
+            }
 
             return devData;
         }
@@ -262,7 +285,11 @@ namespace UsbEject.Library
                 {
                     int error = Marshal.GetLastWin32Error();
                     if (error != Native.ERROR_INVALID_DATA)
-                        throw new Win32Exception(error);
+                    {
+                        Exception ex = Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error());
+                        Logger.Write(LogLevel.Error, ex);
+                        throw ex;
+                    }
                     return defaultValue;
                 }
 
@@ -296,7 +323,11 @@ namespace UsbEject.Library
                 {
                     int error = Marshal.GetLastWin32Error();
                     if (error != Native.ERROR_INVALID_DATA)
-                        throw new Win32Exception(error);
+                    {
+                        Exception ex = Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error());
+                        Logger.Write(LogLevel.Error, ex);
+                        throw ex;
+                    }
                     return defaultValue;
                 }
 

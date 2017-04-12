@@ -74,6 +74,7 @@ namespace UsbEject.Library
             InsufficientPower,
             NonDisableable,
             LegacyDriver,
+            InsufficientRights,
         }
 
         internal const int CM_BUFFER_SIZE = 1024;

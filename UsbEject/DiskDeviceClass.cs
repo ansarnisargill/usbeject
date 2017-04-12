@@ -5,7 +5,6 @@ using Microsoft.Win32.SafeHandles;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Runtime.InteropServices;
 
 namespace UsbEject.Library
@@ -39,14 +38,17 @@ namespace UsbEject.Library
 
         internal override Native.STORAGE_DEVICE_NUMBER GetDiskNumber(string devicePath)
         {
-            Logger.Write(LogLevel.Verbose, "Finding device number for volume: {0}", devicePath);
-
             // Find disks
-            using (SafeFileHandle hFile = Native.CreateFile(devicePath, 0, Native.FILE_SHARE_READ | Native.FILE_SHARE_WRITE, IntPtr.Zero, Native.OPEN_EXISTING, 0, IntPtr.Zero))
+            SafeFileHandle hFile = Native.CreateFile(devicePath, 0, Native.FILE_SHARE_READ | Native.FILE_SHARE_WRITE, IntPtr.Zero, Native.OPEN_EXISTING, 0, IntPtr.Zero);
+            if (hFile.IsInvalid)
             {
-                if (hFile.IsInvalid)
-                    throw new Win32Exception(Marshal.GetLastWin32Error());
+                Exception ex = Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error());
+                Logger.Write(LogLevel.Error, ex);
+                throw ex;
+            }
 
+            using (hFile)
+            {
                 int size = Native.IOCTL_BUFFER_SIZE;
                 IntPtr buffer = Marshal.AllocHGlobal(size);
                 try
@@ -110,7 +112,7 @@ namespace UsbEject.Library
         #endregion
 
         #region IEnumerable
-        
+
         /// <inheritdoc/>
         public IEnumerator<Disk> GetEnumerator()
         {
