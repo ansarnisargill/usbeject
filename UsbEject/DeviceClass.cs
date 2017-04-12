@@ -149,9 +149,8 @@ namespace UsbEject.Library
         private List<Device> GetDevices()
         {
             List<Device> devices = new List<Device>();
-            int index = 0;
             Native.SP_DEVICE_INTERFACE_DATA interfaceData;
-            while ((interfaceData = GetInterfaceData(index)) != null)
+            for (int index = 0; (interfaceData = GetInterfaceData(index)) != null; index++)
             {
                 int size;
                 Native.SP_DEVINFO_DATA devData = GetDeviceData(interfaceData, out size);
@@ -159,7 +158,6 @@ namespace UsbEject.Library
                 Native.STORAGE_DEVICE_NUMBER disknum = GetDiskNumber(devicePath);
                 Device device = CreateDevice(devData, devicePath, index: index, disknum: disknum.DeviceNumber);
                 devices.Add(device);
-                index++;
             }
 
             devices.Sort();
