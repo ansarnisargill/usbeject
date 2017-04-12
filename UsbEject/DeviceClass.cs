@@ -61,7 +61,7 @@ namespace UsbEject.Library
 
         #region CreateDevice
 
-        internal abstract Device CreateDevice(Native.SP_DEVINFO_DATA deviceInfoData, string path, int index, int disknum);
+        internal abstract Device CreateDevice(Native.SP_DEVINFO_DATA deviceInfoData, string path, int index);
 
         #endregion
 
@@ -158,8 +158,7 @@ namespace UsbEject.Library
                 int size;
                 Native.SP_DEVINFO_DATA devData = GetDeviceData(interfaceData, out size);
                 string devicePath = GetDevicePath(interfaceData, devData, size);
-                Native.STORAGE_DEVICE_NUMBER disknum = GetDiskNumber(devicePath);
-                Device device = CreateDevice(devData, devicePath, index: index, disknum: disknum.DeviceNumber);
+                Device device = CreateDevice(devData, devicePath, index);
                 devices.Add(device);
             }
 
@@ -229,11 +228,6 @@ namespace UsbEject.Library
             {
                 Marshal.FreeHGlobal(buffer);
             }
-        }
-
-        internal virtual Native.STORAGE_DEVICE_NUMBER GetDiskNumber(string devicePath)
-        {
-            return new Native.STORAGE_DEVICE_NUMBER { DeviceNumber = -1, DeviceType = -1, PartitionNumber = -1 };
         }
 
         #endregion

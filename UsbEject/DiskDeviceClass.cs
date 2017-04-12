@@ -1,11 +1,9 @@
 // UsbEject version 1.0 March 2006
 // written by Simon Mourier <email: simon [underscore] mourier [at] hotmail [dot] com>
 
-using Microsoft.Win32.SafeHandles;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 
 namespace UsbEject.Library
 {
@@ -29,55 +27,11 @@ namespace UsbEject.Library
 
         #endregion
 
-        #region Member Overrides
+        #region CreateDevice
 
-        internal override Device CreateDevice(Native.SP_DEVINFO_DATA deviceInfoData, string path, int index, int disknum)
+        internal override Device CreateDevice(Native.SP_DEVINFO_DATA deviceInfoData, string path, int index)
         {
-            return new Disk(this, deviceInfoData, path, index: index, disknum: disknum, logger: Logger);
-        }
-
-        internal override Native.STORAGE_DEVICE_NUMBER GetDiskNumber(string devicePath)
-        {
-            // Find disks
-            SafeFileHandle hFile = Native.CreateFile(devicePath, 0, Native.FILE_SHARE_READ | Native.FILE_SHARE_WRITE, IntPtr.Zero, Native.OPEN_EXISTING, 0, IntPtr.Zero);
-            if (hFile.IsInvalid)
-            {
-                Exception ex = Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error());
-                Logger.Write(LogLevel.Error, ex);
-                throw ex;
-            }
-
-            using (hFile)
-            {
-                int size = Native.IOCTL_BUFFER_SIZE;
-                IntPtr buffer = Marshal.AllocHGlobal(size);
-                try
-                {
-                    int bytesReturned = 0;
-                    try
-                    {
-                        if (!Native.DeviceIoControl(hFile, Native.IOCTL_STORAGE_GET_DEVICE_NUMBER, IntPtr.Zero, 0, buffer, size, out bytesReturned, IntPtr.Zero))
-                        {
-                            Logger.Write(LogLevel.Warning, "IOCTL failed.");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.Write(LogLevel.Error, "Exception calling IOCTL: {0}", ex);
-                    }
-
-                    if (bytesReturned > 0)
-                    {
-                        return (Native.STORAGE_DEVICE_NUMBER)Marshal.PtrToStructure(buffer, typeof(Native.STORAGE_DEVICE_NUMBER));
-                    }
-                }
-                finally
-                {
-                    Marshal.FreeHGlobal(buffer);
-                }
-            }
-
-            return base.GetDiskNumber(devicePath);
+            return new Disk(this, deviceInfoData, path, index, Logger);
         }
 
         #endregion

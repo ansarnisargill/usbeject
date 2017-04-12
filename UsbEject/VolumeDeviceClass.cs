@@ -29,9 +29,9 @@ namespace UsbEject.Library
 
         #endregion
 
-        #region Member Overrides
+        #region CreateDevice
 
-        internal override Device CreateDevice(Native.SP_DEVINFO_DATA deviceInfoData, string path, int index, int disknum)
+        internal override Device CreateDevice(Native.SP_DEVINFO_DATA deviceInfoData, string path, int index)
         {
             return new Volume(this, deviceInfoData, path, index, Logger);
         }
