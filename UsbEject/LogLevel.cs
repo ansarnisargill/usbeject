@@ -6,14 +6,14 @@
     public enum LogLevel
     {
         /// <summary>
-        /// Debug.
+        /// Trace.
         /// </summary>
-        Debug = 1,
+        Trace = 0,
 
         /// <summary>
-        /// Verbose.
+        /// Debug.
         /// </summary>
-        Verbose,
+        Debug,
 
         /// <summary>
         /// Information.

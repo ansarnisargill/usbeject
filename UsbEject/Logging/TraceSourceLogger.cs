@@ -60,8 +60,8 @@ namespace UsbEject.Library.Logging
         {
             switch (level)
             {
+                case LogLevel.Trace:
                 case LogLevel.Debug:
-                case LogLevel.Verbose:
                     return TraceEventType.Verbose;
                 case LogLevel.Information:
                     return TraceEventType.Information;

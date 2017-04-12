@@ -143,7 +143,7 @@ namespace UsbEject.Library
             List<int> numbers = new List<int>();
             if (LogicalDrive != null)
             {
-                Logger.Write(LogLevel.Verbose, "Finding disk extents for volume: {0}", LogicalDrive);
+                Logger.Write(LogLevel.Debug, "Finding disk extents for volume: {0}", LogicalDrive);
                 SafeFileHandle hFile = Native.CreateFile(@"\\.\" + LogicalDrive, 0, Native.FILE_SHARE_READ | Native.FILE_SHARE_WRITE, IntPtr.Zero, Native.OPEN_EXISTING, 0, IntPtr.Zero);
                 if (hFile.IsInvalid)
                 {

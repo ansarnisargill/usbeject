@@ -7,6 +7,11 @@ namespace UsbEject.Library.Logging
     /// </summary>
     public sealed class TraceLogger : TraceLoggerBase
     {
+        /// <summary>
+        /// Default <see cref="TraceLogger"/> instance.
+        /// </summary>
+        public static readonly TraceLogger Default = new TraceLogger(LogLevel.Trace, null);
+
         #region Constructor
 
         /// <summary>
