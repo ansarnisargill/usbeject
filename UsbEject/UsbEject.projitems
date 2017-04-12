@@ -17,6 +17,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Logging\TextLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\TraceLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logging\TraceLoggerBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Logging\TraceSourceLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Func.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lazy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Device.cs" />
