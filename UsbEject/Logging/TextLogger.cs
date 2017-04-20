@@ -73,14 +73,14 @@ namespace UsbEject.Library.Logging
         public void Write(LogLevel level, string format, object arg0)
         {
             if (level >= _level)
-                _writer.Write(format, arg0);
+                _writer.WriteLine(format, arg0);
         }
 
         /// <inheritdoc/>
         public void Write(LogLevel level, string format, object[] args)
         {
             if (level >= _level)
-                _writer.Write(format, args);
+                _writer.WriteLine(format, args);
         }
 
         #endregion
