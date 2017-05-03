@@ -313,8 +313,11 @@ namespace UsbEject.Library
                 if (hr != 0)
                 {
                     Exception ex = Marshal.GetExceptionForHR(hr);
-                    Logger.Write(LogLevel.Error, "Error ejecting {0}: {1}", device.InstanceHandle, ex);
-                    // don't throw exceptions, there should be a UI for this
+                    if (ex != null)
+                    {
+                        Logger.Write(LogLevel.Error, "Error ejecting {0}: {1}", device.InstanceHandle, ex);
+                        // don't throw exceptions, there should be a UI for this
+                    }
                 }
             }
         }
