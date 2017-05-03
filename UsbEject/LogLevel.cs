@@ -1,4 +1,8 @@
-﻿namespace UsbEject
+﻿// UsbEject version 2.0 May 2017
+// written by Simon Mourier <email: simon [underscore] mourier [at] hotmail [dot] com>
+// updated by Dmitry Shechtman
+
+namespace UsbEject
 {
     /// <summary>
     /// Log level.

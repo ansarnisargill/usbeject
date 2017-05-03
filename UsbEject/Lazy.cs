@@ -1,4 +1,8 @@
-﻿#if NET20 || NET35
+﻿// UsbEject version 2.0 May 2017
+// written by Simon Mourier <email: simon [underscore] mourier [at] hotmail [dot] com>
+// updated by Dmitry Shechtman
+
+#if NET20 || NET35
 using System;
 
 namespace UsbEject
