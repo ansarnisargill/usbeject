@@ -7,12 +7,12 @@ using System.Collections.Generic;
 using System.Text;
 
 #if NET45
-using VolumeCollection = System.Collections.Generic.IReadOnlyCollection<UsbEject.Library.Volume>;
+using VolumeCollection = System.Collections.Generic.IReadOnlyCollection<UsbEject.Volume>;
 #else
-using VolumeCollection = System.Collections.Generic.IEnumerable<UsbEject.Library.Volume>;
+using VolumeCollection = System.Collections.Generic.IEnumerable<UsbEject.Volume>;
 #endif
 
-namespace UsbEject.Library
+namespace UsbEject
 {
     /// <summary>
     /// The device class for volume devices.

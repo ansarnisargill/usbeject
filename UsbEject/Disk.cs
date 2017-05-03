@@ -2,7 +2,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace UsbEject.Library
+namespace UsbEject
 {
     /// <summary>
     /// A disk device.

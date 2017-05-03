@@ -6,12 +6,12 @@ using System.Collections;
 using System.Collections.Generic;
 
 #if NET45
-using DiskCollection = System.Collections.Generic.IReadOnlyCollection<UsbEject.Library.Disk>;
+using DiskCollection = System.Collections.Generic.IReadOnlyCollection<UsbEject.Disk>;
 #else
-using DiskCollection = System.Collections.Generic.IEnumerable<UsbEject.Library.Disk>;
+using DiskCollection = System.Collections.Generic.IEnumerable<UsbEject.Disk>;
 #endif
 
-namespace UsbEject.Library
+namespace UsbEject
 {
     /// <summary>
     /// The device class for disk devices.

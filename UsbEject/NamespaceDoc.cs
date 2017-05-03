@@ -1,4 +1,4 @@
-﻿namespace UsbEject.Library
+﻿namespace UsbEject
 {
     /// <summary>
     /// UsbEject library types.

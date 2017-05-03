@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UsbEject.Library
+namespace UsbEject
 {
     /// <summary>
     /// Logger interface.

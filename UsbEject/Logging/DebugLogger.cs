@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace UsbEject.Library.Logging
+namespace UsbEject.Logging
 {
     /// <summary>
     /// A logger implementation using <see cref="Debug"/>.

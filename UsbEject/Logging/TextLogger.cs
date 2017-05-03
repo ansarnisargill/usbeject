@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace UsbEject.Library.Logging
+namespace UsbEject.Logging
 {
     /// <summary>
     /// A logger implementation using <see cref="TextWriter"/>.

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UsbEject.Library.Logging
+namespace UsbEject.Logging
 {
     /// <summary>
     /// No-op logger implementation.

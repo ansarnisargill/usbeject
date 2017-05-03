@@ -8,12 +8,12 @@ using System.Runtime.InteropServices;
 using System.Text;
 
 #if NET45
-using DeviceCollection = System.Collections.Generic.IReadOnlyCollection<UsbEject.Library.Device>;
+using DeviceCollection = System.Collections.Generic.IReadOnlyCollection<UsbEject.Device>;
 #else
-using DeviceCollection = System.Collections.Generic.IEnumerable<UsbEject.Library.Device>;
+using DeviceCollection = System.Collections.Generic.IEnumerable<UsbEject.Device>;
 #endif
 
-namespace UsbEject.Library
+namespace UsbEject
 {
     /// <summary>
     /// A generic base class for physical devices.

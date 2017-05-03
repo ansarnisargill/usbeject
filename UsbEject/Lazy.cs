@@ -1,7 +1,7 @@
 ﻿#if NET20 || NET35
 using System;
 
-namespace UsbEject.Library
+namespace UsbEject
 {
     internal sealed class Lazy<T>
     {

@@ -8,14 +8,14 @@ using System.Runtime.InteropServices;
 using System.Text;
 
 #if NET45
-using DeviceCollection = System.Collections.Generic.IReadOnlyCollection<UsbEject.Library.Device>;
-using DiskCollection = System.Collections.Generic.IReadOnlyCollection<UsbEject.Library.Disk>;
+using DeviceCollection = System.Collections.Generic.IReadOnlyCollection<UsbEject.Device>;
+using DiskCollection = System.Collections.Generic.IReadOnlyCollection<UsbEject.Disk>;
 #else
-using DeviceCollection = System.Collections.Generic.IEnumerable<UsbEject.Library.Device>;
-using DiskCollection = System.Collections.Generic.IEnumerable<UsbEject.Library.Disk>;
+using DeviceCollection = System.Collections.Generic.IEnumerable<UsbEject.Device>;
+using DiskCollection = System.Collections.Generic.IEnumerable<UsbEject.Disk>;
 #endif
 
-namespace UsbEject.Library
+namespace UsbEject
 {
     /// <summary>
     /// A volume device.

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace UsbEject.Library.Logging
+namespace UsbEject.Logging
 {
     /// <summary>
     /// A base class for trace logger implementations.

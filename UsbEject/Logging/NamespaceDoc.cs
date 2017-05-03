@@ -1,4 +1,4 @@
-﻿namespace UsbEject.Library.Logging
+﻿namespace UsbEject.Logging
 {
     /// <summary>
     /// UsbEject library logging types.

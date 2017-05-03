@@ -3,7 +3,7 @@
 
 using System;
 
-namespace UsbEject.Library
+namespace UsbEject
 {
     /// <summary>
     /// Contains constants for determining devices capabilities.

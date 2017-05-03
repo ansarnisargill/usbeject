@@ -6,7 +6,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace UsbEject.Library
+namespace UsbEject
 {
     internal static class Native
     {
