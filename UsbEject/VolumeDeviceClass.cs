@@ -6,12 +6,18 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
+#if NET45
+using VolumeCollection = System.Collections.Generic.IReadOnlyCollection<UsbEject.Library.Volume>;
+#else
+using VolumeCollection = System.Collections.Generic.IEnumerable<UsbEject.Library.Volume>;
+#endif
+
 namespace UsbEject.Library
 {
     /// <summary>
     /// The device class for volume devices.
     /// </summary>
-    public class VolumeDeviceClass : DeviceClass, IEnumerable<Volume>
+    public class VolumeDeviceClass : DeviceClass, VolumeCollection
     {
         #region Constructors
 
@@ -24,7 +30,7 @@ namespace UsbEject.Library
             : base(new Guid(Native.GUID_DEVINTERFACE_VOLUME), logger, loggerOwner)
         {
             _logicalDrives = new Lazy<IDictionary<string, string>>(GetLogicalDrives);
-            _volumes = new Lazy<IEnumerable<Volume>>(GetVolumes);
+            _volumes = new Lazy<VolumeCollection>(GetVolumes);
         }
 
         #endregion
@@ -69,12 +75,12 @@ namespace UsbEject.Library
         #endregion
 
         #region Volumes
-        private readonly Lazy<IEnumerable<Volume>> _volumes;
+        private readonly Lazy<VolumeCollection> _volumes;
 
         /// <summary>
         /// Gets the list of volumes.
         /// </summary>
-        public IEnumerable<Volume> Volumes
+        public VolumeCollection Volumes
         {
             get
             {
@@ -82,7 +88,7 @@ namespace UsbEject.Library
             }
         }
 
-        private IEnumerable<Volume> GetVolumes()
+        private VolumeCollection GetVolumes()
         {
             List<Volume> volumes = new List<Volume>();
 
@@ -95,7 +101,7 @@ namespace UsbEject.Library
         }
         #endregion
 
-        #region IEnumerable
+        #region VolumeCollection
 
         /// <inheritdoc/>
         public IEnumerator<Volume> GetEnumerator()
@@ -107,6 +113,17 @@ namespace UsbEject.Library
         {
             return Volumes.GetEnumerator();
         }
+
+#if NET45
+        /// <inheritdoc/>
+        public int Count
+        {
+            get
+            {
+                return Volumes.Count;
+            }
+        }
+#endif
 
         #endregion
     }

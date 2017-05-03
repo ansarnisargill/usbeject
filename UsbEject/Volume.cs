@@ -7,6 +7,14 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 
+#if NET45
+using DeviceCollection = System.Collections.Generic.IReadOnlyCollection<UsbEject.Library.Device>;
+using DiskCollection = System.Collections.Generic.IReadOnlyCollection<UsbEject.Library.Disk>;
+#else
+using DeviceCollection = System.Collections.Generic.IEnumerable<UsbEject.Library.Device>;
+using DiskCollection = System.Collections.Generic.IEnumerable<UsbEject.Library.Disk>;
+#endif
+
 namespace UsbEject.Library
 {
     /// <summary>
@@ -21,7 +29,7 @@ namespace UsbEject.Library
         {
             _volumeName = new Lazy<string>(GetVolumeName);
             _logicalDrive = new Lazy<string>(GetLogicalDrive);
-            _disks = new Lazy<List<Device>>(GetDisks);
+            _disks = new Lazy<DiskCollection>(GetDisks);
             _diskNumbers = new Lazy<int[]>(GetDiskNumbers);
         }
 
@@ -88,12 +96,12 @@ namespace UsbEject.Library
         #endregion
 
         #region Disks
-        private readonly Lazy<List<Device>> _disks;
+        private readonly Lazy<DiskCollection> _disks;
 
         /// <summary>
         /// Gets a list of underlying disks for this volume.
         /// </summary>
-        public List<Device> Disks
+        public DiskCollection Disks
         {
             get
             {
@@ -101,9 +109,9 @@ namespace UsbEject.Library
             }
         }
 
-        private List<Device> GetDisks()
+        private DiskCollection GetDisks()
         {
-            List<Device> disks = new List<Device>();
+            List<Disk> disks = new List<Disk>();
 
             if (DiskNumbers != null)
             {
@@ -208,7 +216,7 @@ namespace UsbEject.Library
             return false;
         }
 
-        internal override List<Device> GetRemovableDevices()
+        internal override DeviceCollection GetRemovableDevices()
         {
             if (Disks == null)
             {
@@ -220,6 +228,7 @@ namespace UsbEject.Library
             {
                 removableDevices.AddRange(disk.RemovableDevices);
             }
+
             return removableDevices;
         }
 

@@ -6,6 +6,12 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 
+#if NET45
+using DeviceCollection = System.Collections.Generic.IReadOnlyCollection<UsbEject.Library.Device>;
+#else
+using DeviceCollection = System.Collections.Generic.IEnumerable<UsbEject.Library.Device>;
+#endif
+
 namespace UsbEject.Library
 {
     /// <summary>
@@ -54,7 +60,7 @@ namespace UsbEject.Library
                 throw ex;
             }
 
-            _devices = new Lazy<List<Device>>(GetDevices);
+            _devices = new Lazy<DeviceCollection>(GetDevices);
         }
 
         #endregion
@@ -136,12 +142,12 @@ namespace UsbEject.Library
 
         #region Devices
 
-        private readonly Lazy<List<Device>> _devices;
+        private readonly Lazy<DeviceCollection> _devices;
 
         /// <summary>
         /// Gets the list of devices of this device class.
         /// </summary>
-        public List<Device> Devices
+        public DeviceCollection Devices
         {
             get
             {
@@ -149,7 +155,7 @@ namespace UsbEject.Library
             }
         }
 
-        private List<Device> GetDevices()
+        private DeviceCollection GetDevices()
         {
             List<Device> devices = new List<Device>();
             Native.SP_DEVICE_INTERFACE_DATA interfaceData;

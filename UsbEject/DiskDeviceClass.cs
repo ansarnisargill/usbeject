@@ -5,12 +5,18 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
+#if NET45
+using DiskCollection = System.Collections.Generic.IReadOnlyCollection<UsbEject.Library.Disk>;
+#else
+using DiskCollection = System.Collections.Generic.IEnumerable<UsbEject.Library.Disk>;
+#endif
+
 namespace UsbEject.Library
 {
     /// <summary>
     /// The device class for disk devices.
     /// </summary>
-    public class DiskDeviceClass : DeviceClass, IEnumerable<Disk>
+    public class DiskDeviceClass : DeviceClass, DiskCollection
     {
         #region Constructors
 
@@ -22,7 +28,7 @@ namespace UsbEject.Library
         public DiskDeviceClass(ILogger logger = null, bool loggerOwner = false)
             : base(new Guid(Native.GUID_DEVINTERFACE_DISK), logger, loggerOwner)
         {
-            _disks = new Lazy<IEnumerable<Disk>>(GetDisks);
+            _disks = new Lazy<DiskCollection>(GetDisks);
         }
 
         #endregion
@@ -38,12 +44,12 @@ namespace UsbEject.Library
 
         #region Disks
 
-        private readonly Lazy<IEnumerable<Disk>> _disks;
+        private readonly Lazy<DiskCollection> _disks;
 
         /// <summary>
         /// Gets the list of disks.
         /// </summary>
-        public IEnumerable<Disk> Disks
+        public DiskCollection Disks
         {
             get
             {
@@ -51,7 +57,7 @@ namespace UsbEject.Library
             }
         }
 
-        private IEnumerable<Disk> GetDisks()
+        private DiskCollection GetDisks()
         {
             List<Disk> disks = new List<Disk>();
 
@@ -65,7 +71,7 @@ namespace UsbEject.Library
 
         #endregion
 
-        #region IEnumerable
+        #region DiskCollection
 
         /// <inheritdoc/>
         public IEnumerator<Disk> GetEnumerator()
@@ -77,6 +83,17 @@ namespace UsbEject.Library
         {
             return Disks.GetEnumerator();
         }
+
+#if NET45
+        /// <inheritdoc/>
+        public int Count
+        {
+            get
+            {
+                return Disks.Count;
+            }
+        }
+#endif
 
         #endregion
     }
