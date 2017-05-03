@@ -329,8 +329,11 @@ namespace UsbEject.Library
                 if (hr != 0)
                 {
                     Exception ex = Marshal.GetExceptionForHR(hr);
-                    Logger.Write(LogLevel.Error, "Error ejecting {0}: {1}", device.InstanceHandle, ex);
-                    throw ex;
+                    if (ex != null)
+                    {
+                        Logger.Write(LogLevel.Error, "Error ejecting {0}: {1}", device.InstanceHandle, ex);
+                        throw ex;
+                    }
                 }
 
                 if (veto != Native.PNP_VETO_TYPE.Ok)
