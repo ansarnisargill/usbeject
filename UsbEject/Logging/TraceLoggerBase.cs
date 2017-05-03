@@ -37,7 +37,7 @@ namespace UsbEject.Library.Logging
         }
 
         /// <inheritdoc/>
-        public void Write(LogLevel level, object obj)
+        public void Log(LogLevel level, object obj)
         {
             if (_category != null)
                 WriteLineIf(level >= _level, obj, _category);
@@ -46,7 +46,7 @@ namespace UsbEject.Library.Logging
         }
 
         /// <inheritdoc/>
-        public void Write(LogLevel level, string str)
+        public void Log(LogLevel level, string str)
         {
             if (_category != null)
                 WriteLineIf(level >= _level, str, _category);
@@ -55,15 +55,15 @@ namespace UsbEject.Library.Logging
         }
 
         /// <inheritdoc/>
-        public void Write(LogLevel level, string format, object arg0)
+        public void Log(LogLevel level, string format, object arg0)
         {
-            Write(level, string.Format(format, arg0));
+            Log(level, string.Format(format, arg0));
         }
 
         /// <inheritdoc/>
-        public void Write(LogLevel level, string format, object[] args)
+        public void Log(LogLevel level, string format, object[] args)
         {
-            Write(level, string.Format(format, args));
+            Log(level, string.Format(format, args));
         }
 
         #endregion

@@ -27,22 +27,22 @@ namespace UsbEject.Library.Logging
             //Do nothing
         }
 
-        void ILogger.Write(LogLevel level, object obj)
+        void ILogger.Log(LogLevel level, object obj)
         {
             //Do nothing
         }
 
-        void ILogger.Write(LogLevel level, string str)
+        void ILogger.Log(LogLevel level, string str)
         {
             //Do nothing
         }
 
-        void ILogger.Write(LogLevel level, string format, object arg0)
+        void ILogger.Log(LogLevel level, string format, object arg0)
         {
             //Do nothing
         }
 
-        void ILogger.Write(LogLevel level, string format, object[] args)
+        void ILogger.Log(LogLevel level, string format, object[] args)
         {
             //Do nothing
         }

@@ -41,7 +41,7 @@ namespace UsbEject.Library
             if (hFile.IsInvalid)
             {
                 Exception ex = Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error());
-                Logger.Write(LogLevel.Error, ex);
+                Logger.Log(LogLevel.Error, ex);
                 throw ex;
             }
 
@@ -63,12 +63,12 @@ namespace UsbEject.Library
                 {
                     if (!Native.DeviceIoControl(hFile, Native.IOCTL_STORAGE_GET_DEVICE_NUMBER, IntPtr.Zero, 0, buffer, size, out bytesReturned, IntPtr.Zero))
                     {
-                        Logger.Write(LogLevel.Warning, "IOCTL failed.");
+                        Logger.Log(LogLevel.Warning, "IOCTL failed.");
                     }
                 }
                 catch (Exception ex)
                 {
-                    Logger.Write(LogLevel.Error, "Exception calling IOCTL: {0}", ex);
+                    Logger.Log(LogLevel.Error, "Exception calling IOCTL: {0}", ex);
                 }
 
                 if (bytesReturned > 0)

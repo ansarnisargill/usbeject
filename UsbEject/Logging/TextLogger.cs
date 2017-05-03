@@ -56,28 +56,28 @@ namespace UsbEject.Library.Logging
         #region ILogger Members
 
         /// <inheritdoc/>
-        public void Write(LogLevel level, object obj)
+        public void Log(LogLevel level, object obj)
         {
             if (level >= _level)
                 _writer.WriteLine(obj);
         }
 
         /// <inheritdoc/>
-        public void Write(LogLevel level, string str)
+        public void Log(LogLevel level, string str)
         {
             if (level >= _level)
                 _writer.WriteLine(str);
         }
 
         /// <inheritdoc/>
-        public void Write(LogLevel level, string format, object arg0)
+        public void Log(LogLevel level, string format, object arg0)
         {
             if (level >= _level)
                 _writer.WriteLine(format, arg0);
         }
 
         /// <inheritdoc/>
-        public void Write(LogLevel level, string format, object[] args)
+        public void Log(LogLevel level, string format, object[] args)
         {
             if (level >= _level)
                 _writer.WriteLine(format, args);

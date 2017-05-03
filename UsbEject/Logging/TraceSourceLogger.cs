@@ -29,28 +29,28 @@ namespace UsbEject.Library.Logging
         }
 
         /// <inheritdoc/>
-        public void Write(LogLevel level, object obj)
+        public void Log(LogLevel level, object obj)
         {
             TraceEventType eventType = GetEventType(level);
             _traceSource.TraceData(eventType, 0, obj);
         }
 
         /// <inheritdoc/>
-        public void Write(LogLevel level, string str)
+        public void Log(LogLevel level, string str)
         {
             TraceEventType eventType = GetEventType(level);
             _traceSource.TraceEvent(eventType, 0, str);
         }
 
         /// <inheritdoc/>
-        public void Write(LogLevel level, string format, object arg0)
+        public void Log(LogLevel level, string format, object arg0)
         {
             TraceEventType eventType = GetEventType(level);
             _traceSource.TraceEvent(eventType, 0, format, arg0);
         }
 
         /// <inheritdoc/>
-        public void Write(LogLevel level, string format, object[] args)
+        public void Log(LogLevel level, string format, object[] args)
         {
             TraceEventType eventType = GetEventType(level);
             _traceSource.TraceEvent(eventType, 0, format, args);

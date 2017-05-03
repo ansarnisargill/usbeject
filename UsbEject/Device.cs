@@ -315,7 +315,7 @@ namespace UsbEject.Library
                     Exception ex = Marshal.GetExceptionForHR(hr);
                     if (ex != null)
                     {
-                        Logger.Write(LogLevel.Error, "Error ejecting {0}: {1}", device.InstanceHandle, ex);
+                        Logger.Log(LogLevel.Error, "Error ejecting {0}: {1}", device.InstanceHandle, ex);
                         // don't throw exceptions, there should be a UI for this
                     }
                 }
@@ -334,7 +334,7 @@ namespace UsbEject.Library
                     Exception ex = Marshal.GetExceptionForHR(hr);
                     if (ex != null)
                     {
-                        Logger.Write(LogLevel.Error, "Error ejecting {0}: {1}", device.InstanceHandle, ex);
+                        Logger.Log(LogLevel.Error, "Error ejecting {0}: {1}", device.InstanceHandle, ex);
                         throw ex;
                     }
                 }
@@ -342,9 +342,9 @@ namespace UsbEject.Library
                 if (veto != Native.PNP_VETO_TYPE.Ok)
                 {
                     if (sb.Length > 0)
-                        Logger.Write(LogLevel.Warning, "Vetoed ejecting {0}: {1} (2)", device.InstanceHandle, veto, sb.ToString());
+                        Logger.Log(LogLevel.Warning, "Vetoed ejecting {0}: {1} (2)", device.InstanceHandle, veto, sb.ToString());
                     else
-                        Logger.Write(LogLevel.Warning, "Vetoed ejecting {0}: {1}", device.InstanceHandle, veto);
+                        Logger.Log(LogLevel.Warning, "Vetoed ejecting {0}: {1}", device.InstanceHandle, veto);
                     return veto.ToString();
                 }
             }
