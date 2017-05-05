@@ -1,11 +1,9 @@
-usbeject
-========
+# usbeject
 
 .NET class library to safely eject removable storage.
 
 
-Details
--------
+## Details
 
 Code taken from a [CodeProject article](https://www.codeproject.com/Articles/13530/Eject-USB-disks-using-C)
 with the following modifications/additions:
@@ -14,22 +12,21 @@ with the following modifications/additions:
 * Added AnyCPU support (@zergmk2)
 * Built for .NET 2.0, 3.5 and 4.0 in addition to .NET 4.5
 * Simplified usage
-* Added logging abstraction
+* Fixed API collection types (`IReadOnlyCollection<T>` in .NET 4.5, `IEnumerable<T>` in older targets)
+* Added logging abstraction (and [Microsoft.Extensions.Logging adapter](https://github.com/CHDKUtil/UsbEject.Logging.Microsoft.Extensions))
 * Implemented thread-safe properties
 * Implemented Disposable pattern
 * Fixed minor bugs
 
 
-Installation
-------------
+## Installation
 
 ```powershell
 Install-Package UsbEject -Pre
 ```
 
 
-Usage
------
+## Usage
 
 ```csharp
 using (VolumeDeviceClass volumes = new VolumeDeviceClass())
@@ -40,14 +37,12 @@ using (VolumeDeviceClass volumes = new VolumeDeviceClass())
 ```
 
 
-Reference
----------
+## Reference
 
 https://chdkutil.github.io/UsbEject
 
 
-Notice
-------
+## Notice
 
 Copyright © 2006 Simon Mourier
 
