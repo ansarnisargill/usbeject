@@ -55,12 +55,6 @@ namespace UsbEject.Logging
         }
 
         /// <inheritdoc/>
-        public void Log(LogLevel level, string format, object arg0)
-        {
-            Log(level, string.Format(format, arg0));
-        }
-
-        /// <inheritdoc/>
         public void Log(LogLevel level, string format, object[] args)
         {
             Log(level, string.Format(format, args));

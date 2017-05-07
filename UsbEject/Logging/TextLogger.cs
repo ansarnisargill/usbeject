@@ -70,13 +70,6 @@ namespace UsbEject.Logging
         }
 
         /// <inheritdoc/>
-        public void Log(LogLevel level, string format, object arg0)
-        {
-            if (level >= _level)
-                _writer.WriteLine(format, arg0);
-        }
-
-        /// <inheritdoc/>
         public void Log(LogLevel level, string format, object[] args)
         {
             if (level >= _level)

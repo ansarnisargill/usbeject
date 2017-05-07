@@ -43,13 +43,6 @@ namespace UsbEject.Logging
         }
 
         /// <inheritdoc/>
-        public void Log(LogLevel level, string format, object arg0)
-        {
-            TraceEventType eventType = GetEventType(level);
-            _traceSource.TraceEvent(eventType, 0, format, arg0);
-        }
-
-        /// <inheritdoc/>
         public void Log(LogLevel level, string format, object[] args)
         {
             TraceEventType eventType = GetEventType(level);

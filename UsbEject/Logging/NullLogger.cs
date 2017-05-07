@@ -37,11 +37,6 @@ namespace UsbEject.Logging
             //Do nothing
         }
 
-        void ILogger.Log(LogLevel level, string format, object arg0)
-        {
-            //Do nothing
-        }
-
         void ILogger.Log(LogLevel level, string format, object[] args)
         {
             //Do nothing

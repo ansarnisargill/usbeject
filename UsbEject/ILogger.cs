@@ -30,14 +30,6 @@ namespace UsbEject
         /// </summary>
         /// <param name="level">Log level.</param>
         /// <param name="format">Format string.</param>
-        /// <param name="arg0">Argument.</param>
-        void Log(LogLevel level, string format, object arg0);
-
-        /// <summary>
-        /// Writes a formatted string to the log.
-        /// </summary>
-        /// <param name="level">Log level.</param>
-        /// <param name="format">Format string.</param>
         /// <param name="args">Arguments.</param>
         void Log(LogLevel level, string format, params object[] args);
     }
