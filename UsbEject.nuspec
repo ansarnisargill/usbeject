@@ -3,7 +3,7 @@
   <metadata>
     <id>UsbEject</id>
     <title>UsbEject</title>
-    <version>2.1.0-alpha</version>
+    <version>2.2.0-alpha</version>
     <authors>Simon Mourier</authors>
     <owners>Dmitry Shechtman</owners>
     <projectUrl>https://github.com/CHDKUtil/usbeject</projectUrl>
