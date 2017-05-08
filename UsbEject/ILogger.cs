@@ -9,7 +9,7 @@ namespace UsbEject
     /// <summary>
     /// Logger interface.
     /// </summary>
-    public interface ILogger : IDisposable
+    public interface ILogger
     {
         /// <summary>
         /// Writes an object to the log.

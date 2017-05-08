@@ -6,7 +6,7 @@ namespace UsbEject.Logging
     /// <summary>
     /// A logger implementation using <see cref="TextWriter"/>.
     /// </summary>
-    public class TextLogger : ILogger
+    public class TextLogger : ILogger, IDisposable
     {
         #region Fields
 

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace UsbEject.Logging
+﻿namespace UsbEject.Logging
 {
     /// <summary>
     /// No-op logger implementation.
@@ -21,11 +19,6 @@ namespace UsbEject.Logging
         #endregion
 
         #region ILogger Members
-
-        void IDisposable.Dispose()
-        {
-            //Do nothing
-        }
 
         void ILogger.Log(LogLevel level, object obj)
         {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace UsbEject.Logging
+﻿namespace UsbEject.Logging
 {
     /// <summary>
     /// A base class for trace logger implementations.
@@ -30,11 +28,6 @@ namespace UsbEject.Logging
         #endregion
 
         #region ILogger Members
-
-        void IDisposable.Dispose()
-        {
-            //Do nothing
-        }
 
         /// <inheritdoc/>
         public void Log(LogLevel level, object obj)

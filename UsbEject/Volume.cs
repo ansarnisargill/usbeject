@@ -116,7 +116,7 @@ namespace UsbEject
 
             if (DiskNumbers != null)
             {
-                DiskDeviceClass diskClass = new DiskDeviceClass(Logger, false);
+                DiskDeviceClass diskClass = new DiskDeviceClass(Logger);
                 foreach (int index in DiskNumbers)
                 {
                     foreach (Disk disk in diskClass)

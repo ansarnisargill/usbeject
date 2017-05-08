@@ -33,9 +33,8 @@ namespace UsbEject
         /// </summary>
         /// <param name="classGuid">A device class Guid.</param>
         /// <param name="logger">Logger.</param>
-        /// <param name="loggerOwner">Indicates whether the device class instance owns <paramref name="logger"/>.</param>
-        protected DeviceClass(Guid classGuid, ILogger logger, bool loggerOwner)
-            : this(classGuid, IntPtr.Zero, logger, loggerOwner)
+        protected DeviceClass(Guid classGuid, ILogger logger)
+            : this(classGuid, IntPtr.Zero, logger)
         {
         }
 
@@ -45,13 +44,11 @@ namespace UsbEject
         /// <param name="classGuid">A device class Guid.</param>
         /// <param name="hwndParent">The handle of the top-level window to be used for any user interface or IntPtr.Zero for no handle.</param>
         /// <param name="logger">Logger.</param>
-        /// <param name="loggerOwner">Indicates whether the device class instance owns <paramref name="logger"/>.</param>
-		protected DeviceClass(Guid classGuid, IntPtr hwndParent, ILogger logger, bool loggerOwner)
+		protected DeviceClass(Guid classGuid, IntPtr hwndParent, ILogger logger)
         {
             _classGuid = classGuid;
 
             Logger = logger ?? Logging.NullLogger.Instance;
-            LoggerOwner = loggerOwner;
 
             _deviceInfoSet = Native.SetupDiGetClassDevs(ref _classGuid, 0, hwndParent, Native.DIGCF_DEVICEINTERFACE | Native.DIGCF_PRESENT);
             if (_deviceInfoSet == (IntPtr)Native.INVALID_HANDLE_VALUE)
@@ -84,13 +81,6 @@ namespace UsbEject
             {
                 Native.SetupDiDestroyDeviceInfoList(_deviceInfoSet);
                 _deviceInfoSet = IntPtr.Zero;
-            }
-
-            if (Logger != null)
-            {
-                if (LoggerOwner)
-                    Logger.Dispose();
-                Logger = null;
             }
         }
 
@@ -131,13 +121,6 @@ namespace UsbEject
         {
             get;
             private set;
-        }
-        #endregion
-
-        #region LoggerOwner
-        private bool LoggerOwner
-        {
-            get;
         }
         #endregion
 

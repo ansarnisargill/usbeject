@@ -26,9 +26,8 @@ namespace UsbEject
         /// Initializes a new instance of the VolumeDeviceClass class.
         /// </summary>
         /// <param name="logger">Logger.</param>
-        /// <param name="loggerOwner">Indicates whether the device class instance owns <paramref name="logger"/>.</param>
-        public VolumeDeviceClass(ILogger logger = null, bool loggerOwner = false)
-            : base(new Guid(Native.GUID_DEVINTERFACE_VOLUME), logger, loggerOwner)
+        public VolumeDeviceClass(ILogger logger = null)
+            : base(new Guid(Native.GUID_DEVINTERFACE_VOLUME), logger)
         {
             _logicalDrives = new Lazy<IDictionary<string, string>>(GetLogicalDrives);
             _volumes = new Lazy<VolumeCollection>(GetVolumes);

@@ -25,9 +25,8 @@ namespace UsbEject
         /// Initializes a new instance of the DiskDeviceClass class.
         /// </summary>
         /// <param name="logger">Logger.</param>
-        /// <param name="loggerOwner">Indicates whether the device class instance owns <paramref name="logger"/>.</param>
-        public DiskDeviceClass(ILogger logger = null, bool loggerOwner = false)
-            : base(new Guid(Native.GUID_DEVINTERFACE_DISK), logger, loggerOwner)
+        public DiskDeviceClass(ILogger logger = null)
+            : base(new Guid(Native.GUID_DEVINTERFACE_DISK), logger)
         {
             _disks = new Lazy<DiskCollection>(GetDisks);
         }

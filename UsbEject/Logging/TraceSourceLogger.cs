@@ -1,11 +1,12 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
 namespace UsbEject.Logging
 {
     /// <summary>
     /// A logger implementation using <see cref="TraceSource"/>.
     /// </summary>
-    public sealed class TraceSourceLogger : ILogger
+    public sealed class TraceSourceLogger : ILogger, IDisposable
     {
         private TraceSource _traceSource;
 
