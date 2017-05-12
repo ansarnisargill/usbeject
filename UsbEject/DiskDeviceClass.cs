@@ -2,6 +2,7 @@
 // written by Simon Mourier <email: simon [underscore] mourier [at] hotmail [dot] com>
 // updated by Dmitry Shechtman
 
+using Chimp.Logging;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,15 +18,20 @@ namespace UsbEject
     /// <summary>
     /// The device class for disk devices.
     /// </summary>
-    public class DiskDeviceClass : DeviceClass, DiskCollection
+    public sealed class DiskDeviceClass : DeviceClass, DiskCollection
     {
         #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the DiskDeviceClass class.
         /// </summary>
-        /// <param name="logger">Logger.</param>
-        public DiskDeviceClass(ILogger logger = null)
+        /// <param name="loggerFactory">Logger factory.</param>
+        public DiskDeviceClass(ILoggerFactory loggerFactory)
+            : this(loggerFactory.CreateLogger<DiskDeviceClass>())
+        {
+        }
+
+        internal DiskDeviceClass(ILogger logger)
             : base(new Guid(Native.GUID_DEVINTERFACE_DISK), logger)
         {
             _disks = new Lazy<DiskCollection>(GetDisks);

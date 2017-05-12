@@ -2,6 +2,7 @@
 // written by Simon Mourier <email: simon [underscore] mourier [at] hotmail [dot] com>
 // updated by Dmitry Shechtman
 
+using Chimp.Logging;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace UsbEject
     /// <summary>
     /// A volume device.
     /// </summary>
-    public class Volume : Device, IComparable
+    public sealed class Volume : Device, IComparable
     {
         #region Constructors
 

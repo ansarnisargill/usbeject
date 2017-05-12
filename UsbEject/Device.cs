@@ -2,6 +2,7 @@
 // written by Simon Mourier <email: simon [underscore] mourier [at] hotmail [dot] com>
 // updated by Dmitry Shechtman
 
+using Chimp.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

@@ -1,4 +1,5 @@
-﻿namespace UsbEject.Logging
+﻿using Chimp.Logging;
+namespace UsbEject.Logging
 {
     /// <summary>
     /// A base class for trace logger implementations.

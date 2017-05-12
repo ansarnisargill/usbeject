@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Chimp.Logging;
+using System;
 
 namespace UsbEject.Logging
 {

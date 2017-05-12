@@ -46,6 +46,12 @@
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\CHDKUtil\Chimp.Logging.Core\src\Net45.csproj">
+      <Project>{e52f2e9d-fe91-40e4-b039-79318bd764b6}</Project>
+      <Name>Net45</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="..\UsbEject\UsbEject.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

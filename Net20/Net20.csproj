@@ -42,6 +42,12 @@
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\CHDKUtil\Chimp.Logging.Core\src\Net20.csproj">
+      <Project>{491fdb2a-15fe-48f6-9d58-f12a42b326e0}</Project>
+      <Name>Net20</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="..\UsbEject\UsbEject.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

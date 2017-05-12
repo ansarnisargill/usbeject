@@ -2,6 +2,7 @@
 // written by Simon Mourier <email: simon [underscore] mourier [at] hotmail [dot] com>
 // updated by Dmitry Shechtman
 
+using Chimp.Logging;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -48,7 +49,7 @@ namespace UsbEject
         {
             _classGuid = classGuid;
 
-            Logger = logger ?? Logging.NullLogger.Instance;
+            Logger = logger;
 
             _deviceInfoSet = Native.SetupDiGetClassDevs(ref _classGuid, 0, hwndParent, Native.DIGCF_DEVICEINTERFACE | Native.DIGCF_PRESENT);
             if (_deviceInfoSet == (IntPtr)Native.INVALID_HANDLE_VALUE)
@@ -117,7 +118,10 @@ namespace UsbEject
         #endregion
 
         #region Logger
-        internal ILogger Logger
+        /// <summary>
+        /// Logger.
+        /// </summary>
+        protected ILogger Logger
         {
             get;
             private set;

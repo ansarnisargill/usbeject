@@ -46,6 +46,12 @@
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\CHDKUtil\Chimp.Logging.Core\src\Net35.csproj">
+      <Project>{bd90b573-d10c-4fe3-b63d-070eef38aa4b}</Project>
+      <Name>Net35</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="..\UsbEject\UsbEject.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

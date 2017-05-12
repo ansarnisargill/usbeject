@@ -2,6 +2,7 @@
 // written by Simon Mourier <email: simon [underscore] mourier [at] hotmail [dot] com>
 // updated by Dmitry Shechtman
 
+using Chimp.Logging;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.Runtime.InteropServices;
@@ -11,7 +12,7 @@ namespace UsbEject
     /// <summary>
     /// A disk device.
     /// </summary>
-    public class Disk : Device
+    public sealed class Disk : Device
     {
         #region Constructor
 

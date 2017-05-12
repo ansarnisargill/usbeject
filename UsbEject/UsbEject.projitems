@@ -10,14 +10,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Properties\AssemblyInfo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Logging\ConsoleLogger.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Logging\DebugLogger.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Logging\NamespaceDoc.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Logging\NullLogger.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Logging\TextLogger.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Logging\TraceLogger.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Logging\TraceLoggerBase.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Logging\TraceSourceLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Func.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Lazy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Device.cs" />
@@ -25,15 +17,12 @@
     <Compile Include="$(MSBuildThisFileDirectory)DeviceClass.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Disk.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DiskDeviceClass.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)LogLevel.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NamespaceDoc.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Native.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)ILogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Volume.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)VolumeDeviceClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="$(MSBuildThisFileDirectory)Properties\" />
-    <Folder Include="$(MSBuildThisFileDirectory)Logging\" />
   </ItemGroup>
 </Project>

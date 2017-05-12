@@ -2,6 +2,7 @@
 // written by Simon Mourier <email: simon [underscore] mourier [at] hotmail [dot] com>
 // updated by Dmitry Shechtman
 
+using Chimp.Logging;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,15 +19,20 @@ namespace UsbEject
     /// <summary>
     /// The device class for volume devices.
     /// </summary>
-    public class VolumeDeviceClass : DeviceClass, VolumeCollection
+    public sealed class VolumeDeviceClass : DeviceClass, VolumeCollection
     {
         #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the VolumeDeviceClass class.
         /// </summary>
-        /// <param name="logger">Logger.</param>
-        public VolumeDeviceClass(ILogger logger = null)
+        /// <param name="loggerFactory">Logger factory.</param>
+        public VolumeDeviceClass(ILoggerFactory loggerFactory)
+            : this(loggerFactory.CreateLogger<VolumeDeviceClass>())
+        {
+        }
+
+        internal VolumeDeviceClass(ILogger logger)
             : base(new Guid(Native.GUID_DEVINTERFACE_VOLUME), logger)
         {
             _logicalDrives = new Lazy<IDictionary<string, string>>(GetLogicalDrives);
