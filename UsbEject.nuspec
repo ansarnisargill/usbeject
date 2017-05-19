@@ -3,7 +3,7 @@
   <metadata>
     <id>UsbEject</id>
     <title>UsbEject</title>
-    <version>3.0.0-alpha</version>
+    <version>3.0.1-alpha</version>
     <authors>Simon Mourier</authors>
     <owners>Dmitry Shechtman</owners>
     <projectUrl>https://github.com/CHDKUtil/usbeject</projectUrl>
@@ -14,6 +14,9 @@
     <tags>usb eject usbeject</tags>
     <releaseNotes>Fixed 64-bit crash
 Migrated to Chimp.Logging</releaseNotes>
+    <dependencies>
+      <dependency id="Chimp.Logging.Core" version="0.2.0-alpha" />
+    </dependencies>
   </metadata>
   <files>
     <file src="README.txt" />
