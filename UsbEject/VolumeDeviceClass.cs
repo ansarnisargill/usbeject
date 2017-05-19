@@ -26,6 +26,14 @@ namespace UsbEject
         /// <summary>
         /// Initializes a new instance of the VolumeDeviceClass class.
         /// </summary>
+        public VolumeDeviceClass()
+            : this(NoOpLoggerFactory.Instance)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the VolumeDeviceClass class.
+        /// </summary>
         /// <param name="loggerFactory">Logger factory.</param>
         public VolumeDeviceClass(ILoggerFactory loggerFactory)
             : this(loggerFactory.CreateLogger<VolumeDeviceClass>())
