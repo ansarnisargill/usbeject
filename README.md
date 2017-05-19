@@ -9,11 +9,11 @@ Code taken from a [CodeProject article](https://www.codeproject.com/Articles/135
 with the following modifications/additions:
 
 * Fixed a bug where it wasn't ejecting the drive it claimed to be ejecting (@mthiffau)
-* Added AnyCPU support (@zergmk2)
+* Added AnyCPU support (thanks @iscgar)
 * Built for .NET 2.0, 3.5 and 4.0 in addition to .NET 4.5
 * Simplified usage
 * Fixed API collection types (`IReadOnlyCollection<T>` in .NET 4.5, `IEnumerable<T>` in older targets)
-* Added logging abstraction (and [Microsoft.Extensions.Logging adapter](https://github.com/CHDKUtil/UsbEject.Logging.Microsoft.Extensions))
+* Added [Chimp.Logging.Core](https://github.com/CHDKUtil/Chimp.Logging.Core) abstraction
 * Implemented thread-safe properties
 * Implemented Disposable pattern
 * Fixed minor bugs
