@@ -35,6 +35,10 @@
     <DocumentationFile>bin\Release\UsbEject.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Chimp.Logging.Core, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Chimp.Logging.Core.0.2.0-alpha\lib\net20\Chimp.Logging.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -43,10 +47,7 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\CHDKUtil\Chimp.Logging.Core\src\Net20.csproj">
-      <Project>{491fdb2a-15fe-48f6-9d58-f12a42b326e0}</Project>
-      <Name>Net20</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="..\UsbEject\UsbEject.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

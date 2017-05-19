@@ -36,6 +36,10 @@
     <DocumentationFile>bin\Release\UsbEject.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Chimp.Logging.Core, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Chimp.Logging.Core.0.2.0-alpha\lib\net35-client\Chimp.Logging.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -47,10 +51,7 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\CHDKUtil\Chimp.Logging.Core\src\Net35.csproj">
-      <Project>{bd90b573-d10c-4fe3-b63d-070eef38aa4b}</Project>
-      <Name>Net35</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="..\UsbEject\UsbEject.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
