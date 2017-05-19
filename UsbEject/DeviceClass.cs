@@ -163,7 +163,6 @@ namespace UsbEject
         private Native.SP_DEVICE_INTERFACE_DATA GetInterfaceData(int index)
         {
             Native.SP_DEVICE_INTERFACE_DATA interfaceData = new Native.SP_DEVICE_INTERFACE_DATA();
-            interfaceData.cbSize = (uint)Marshal.SizeOf(interfaceData);
 
             if (!Native.SetupDiEnumDeviceInterfaces(_deviceInfoSet, null, ref _classGuid, index, interfaceData))
             {
@@ -183,7 +182,6 @@ namespace UsbEject
         private Native.SP_DEVINFO_DATA GetDeviceData(Native.SP_DEVICE_INTERFACE_DATA interfaceData, out int size)
         {
             Native.SP_DEVINFO_DATA devData = new Native.SP_DEVINFO_DATA();
-            devData.cbSize = (uint)Marshal.SizeOf(devData);
             size = 0;
             if (!Native.SetupDiGetDeviceInterfaceDetail(_deviceInfoSet, interfaceData, IntPtr.Zero, 0, ref size, devData))
             {
@@ -205,7 +203,6 @@ namespace UsbEject
             try
             {
                 Native.SP_DEVICE_INTERFACE_DETAIL_DATA detailData = new Native.SP_DEVICE_INTERFACE_DETAIL_DATA();
-                detailData.cbSize = (uint)Marshal.SizeOf(detailData);
                 Marshal.StructureToPtr(detailData, buffer, false);
 
                 if (!Native.SetupDiGetDeviceInterfaceDetail(_deviceInfoSet, interfaceData, buffer, size, ref size, devData))
@@ -240,7 +237,6 @@ namespace UsbEject
             }
 
             Native.SP_DEVINFO_DATA devData = new Native.SP_DEVINFO_DATA();
-            devData.cbSize = (uint)Marshal.SizeOf(devData);
             if (!Native.SetupDiOpenDeviceInfo(_deviceInfoSet, sb.ToString(), IntPtr.Zero, 0, devData))
             {
                 Exception ex = Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error());

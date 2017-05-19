@@ -127,26 +127,26 @@ namespace UsbEject
         [StructLayout(LayoutKind.Sequential)]
         internal class SP_DEVINFO_DATA
         {
-            internal uint cbSize;
+            private readonly int cbSize = Marshal.SizeOf(typeof(SP_DEVINFO_DATA));
             internal Guid classGuid = Guid.Empty; // temp
             internal uint devInst = 0; // dumy
-            internal int reserved = 0;
+            internal UIntPtr reserved = UIntPtr.Zero;
         }
 
-        [StructLayout(LayoutKind.Sequential, Pack = 2)]
-        internal struct SP_DEVICE_INTERFACE_DETAIL_DATA
+        [StructLayout(LayoutKind.Sequential)]
+        internal class SP_DEVICE_INTERFACE_DETAIL_DATA
         {
-            internal uint cbSize;
-            internal short devicePath;
+            private readonly int cbSize = Marshal.SizeOf(typeof(SP_DEVICE_INTERFACE_DETAIL_DATA));
+            internal char devicePath;
         }
 
         [StructLayout(LayoutKind.Sequential)]
         internal class SP_DEVICE_INTERFACE_DATA
         {
-            internal uint cbSize;
-            internal Guid interfaceClassGuid = Guid.Empty; // temp
+            private readonly int cbSize = Marshal.SizeOf(typeof(SP_DEVICE_INTERFACE_DATA));
+            internal Guid interfaceClassGuid; // temp
             internal uint flags = 0;
-            internal int reserved = 0;
+            internal UIntPtr reserved = UIntPtr.Zero;
         }
 
         [DllImport("setupapi.dll", SetLastError = true)]
