@@ -136,7 +136,7 @@ namespace UsbEject
         [StructLayout(LayoutKind.Sequential)]
         internal class SP_DEVICE_INTERFACE_DETAIL_DATA
         {
-            private readonly int cbSize = Marshal.SizeOf(typeof(SP_DEVICE_INTERFACE_DETAIL_DATA));
+            private readonly int cbSize = Marshal.SizeOf(typeof(int)) + (Marshal.SizeOf(typeof(IntPtr)) == 8 ? 4 : Marshal.SystemDefaultCharSize);
             internal char devicePath;
         }
 
