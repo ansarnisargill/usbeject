@@ -3,8 +3,8 @@
   <metadata>
     <id>UsbEject</id>
     <title>UsbEject</title>
-    <version>3.0.2-alpha</version>
-    <authors>Simon Mourier</authors>
+    <version>3.1.0-alpha</version>
+    <authors>Simon Mourier, Dmitry Shechtman</authors>
     <owners>Dmitry Shechtman</owners>
     <projectUrl>https://github.com/CHDKUtil/usbeject</projectUrl>
     <licenseUrl>https://www.codeproject.com/info/cpol10.aspx</licenseUrl>
@@ -12,8 +12,7 @@
     <description>Safely eject removable storage</description>
     <copyright>Copyright © 2006 Simon Mourier</copyright>
     <tags>usb eject usbeject</tags>
-    <releaseNotes>Fixed 64-bit crash
-Migrated to Chimp.Logging</releaseNotes>
+    <releaseNotes>Proper AnyCPU support</releaseNotes>
     <dependencies>
       <dependency id="Chimp.Logging.Core" version="0.2.0-alpha" />
     </dependencies>
@@ -22,15 +21,11 @@ Migrated to Chimp.Logging</releaseNotes>
     <file src="README.txt" />
     <file src="Net20\bin\Release\UsbEject.dll" target="lib\net20" />
     <file src="Net20\bin\Release\UsbEject.xml" target="lib\net20" />
-    <file src="Net20\bin\Release\UsbEject.pdb" target="lib\net20" />
     <file src="Net35\bin\Release\UsbEject.dll" target="lib\net35-client" />
     <file src="Net35\bin\Release\UsbEject.xml" target="lib\net35-client" />
-    <file src="Net35\bin\Release\UsbEject.pdb" target="lib\net35-client" />
     <file src="Net40\bin\Release\UsbEject.dll" target="lib\net4-client" />
     <file src="Net40\bin\Release\UsbEject.xml" target="lib\net4-client" />
-    <file src="Net40\bin\Release\UsbEject.pdb" target="lib\net4-client" />
     <file src="Net45\bin\Release\UsbEject.dll" target="lib\net45" />
     <file src="Net45\bin\Release\UsbEject.xml" target="lib\net45" />
-    <file src="Net45\bin\Release\UsbEject.pdb" target="lib\net45" />
   </files>
 </package>
