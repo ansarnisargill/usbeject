@@ -37,8 +37,9 @@ namespace UsbEject
         internal const int ERROR_INVALID_DATA = 13;
 
         // from winioctl.h
-        internal const string GUID_DEVINTERFACE_VOLUME = "53f5630d-b6bf-11d0-94f2-00a0c91efb8b";
-        internal const string GUID_DEVINTERFACE_DISK = "53f56307-b6bf-11d0-94f2-00a0c91efb8b";
+        internal static readonly Guid GUID_DEVINTERFACE_VOLUME = new Guid("53f5630d-b6bf-11d0-94f2-00a0c91efb8b");
+        internal static readonly Guid GUID_DEVINTERFACE_DISK = new Guid("53f56307-b6bf-11d0-94f2-00a0c91efb8b");
+
         internal const int IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS = 0x00560000;
         internal const int IOCTL_STORAGE_GET_DEVICE_NUMBER = 0x002d1080;
 

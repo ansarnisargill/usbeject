@@ -41,7 +41,7 @@ namespace UsbEject
         }
 
         internal VolumeDeviceClass(ILogger logger)
-            : base(new Guid(Native.GUID_DEVINTERFACE_VOLUME), logger)
+            : base(Native.GUID_DEVINTERFACE_VOLUME, logger)
         {
             _logicalDrives = new Lazy<IDictionary<string, string>>(GetLogicalDrives);
             _volumes = new Lazy<VolumeCollection>(GetVolumes);

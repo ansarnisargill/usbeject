@@ -40,7 +40,7 @@ namespace UsbEject
         }
 
         internal DiskDeviceClass(ILogger logger)
-            : base(new Guid(Native.GUID_DEVINTERFACE_DISK), logger)
+            : base(Native.GUID_DEVINTERFACE_DISK, logger)
         {
             _disks = new Lazy<DiskCollection>(GetDisks);
         }
