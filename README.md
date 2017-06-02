@@ -9,7 +9,7 @@ Code taken from a [CodeProject article](https://www.codeproject.com/Articles/135
 with the following modifications/additions:
 
 * Fixed a bug where it wasn't ejecting the drive it claimed to be ejecting (@mthiffau)
-* Added AnyCPU support (thanks @iscgar)
+* Added AnyCPU support (@iscgar)
 * Built for .NET 2.0, 3.5 and 4.0 in addition to .NET 4.5
 * Simplified usage
 * Fixed API collection types (`IReadOnlyCollection<T>` in .NET 4.5, `IEnumerable<T>` in older targets)
