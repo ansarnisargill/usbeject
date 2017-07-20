@@ -3,7 +3,7 @@
   <metadata>
     <id>UsbEject</id>
     <title>UsbEject</title>
-    <version>3.1.0-alpha</version>
+    <version>3.2.1-alpha</version>
     <authors>Simon Mourier, Dmitry Shechtman</authors>
     <owners>Dmitry Shechtman</owners>
     <projectUrl>https://github.com/CHDKUtil/usbeject</projectUrl>
@@ -12,7 +12,7 @@
     <description>Safely eject removable storage</description>
     <copyright>Copyright © 2006 Simon Mourier</copyright>
     <tags>usb eject usbeject</tags>
-    <releaseNotes>Proper AnyCPU support</releaseNotes>
+    <releaseNotes>Fixed x64 overflow</releaseNotes>
     <dependencies>
       <dependency id="Chimp.Logging.Core" version="0.2.0-alpha" />
     </dependencies>
