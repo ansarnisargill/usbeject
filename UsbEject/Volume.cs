@@ -186,7 +186,7 @@ namespace UsbEject
                             int numberOfDiskExtents = (int)Marshal.PtrToStructure(buffer, typeof(int));
                             for (int i = 0; i < numberOfDiskExtents; i++)
                             {
-                                IntPtr extentPtr = new IntPtr(buffer.ToInt32() + Marshal.SizeOf(typeof(long)) + i * Marshal.SizeOf(typeof(Native.DISK_EXTENT)));
+                                IntPtr extentPtr = new IntPtr(buffer.ToInt64() + Marshal.SizeOf(typeof(long)) + i * Marshal.SizeOf(typeof(Native.DISK_EXTENT)));
                                 Native.DISK_EXTENT extent = (Native.DISK_EXTENT)Marshal.PtrToStructure(extentPtr, typeof(Native.DISK_EXTENT));
                                 numbers.Add(extent.DiskNumber);
                             }

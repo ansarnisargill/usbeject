@@ -212,7 +212,7 @@ namespace UsbEject
                     throw ex;
                 }
 
-                IntPtr pDevicePath = (IntPtr)((int)buffer + Marshal.SizeOf(typeof(int)));
+                IntPtr pDevicePath = new IntPtr(buffer.ToInt64() + Marshal.SizeOf(typeof(int)));
                 return Marshal.PtrToStringAuto(pDevicePath);
             }
             finally
