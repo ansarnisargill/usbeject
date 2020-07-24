@@ -1,9 +1,4 @@
-﻿// UsbEject version 2.0 May 2017
-// written by Simon Mourier <email: simon [underscore] mourier [at] hotmail [dot] com>
-// updated by Dmitry Shechtman
-
-using Chimp.Logging;
-using Microsoft.Win32.SafeHandles;
+﻿using Microsoft.Win32.SafeHandles;
 using System;
 using System.Runtime.InteropServices;
 
@@ -16,8 +11,8 @@ namespace UsbEject
     {
         #region Constructor
 
-        internal Disk(DeviceClass deviceClass, Native.SP_DEVINFO_DATA deviceInfoData, string path, int index, ILogger logger)
-            : base(deviceClass, deviceInfoData, path, index, logger)
+        internal Disk(DeviceClass deviceClass, Native.SP_DEVINFO_DATA deviceInfoData, string path, int index)
+            : base(deviceClass, deviceInfoData, path, index)
         {
             _diskNumber = new Lazy<int>(GetDiskNumber);
         }
@@ -46,7 +41,7 @@ namespace UsbEject
             if (hFile.IsInvalid)
             {
                 Exception ex = Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error());
-                Logger.Log(LogLevel.Error, ex);
+                
                 throw ex;
             }
 
@@ -68,12 +63,12 @@ namespace UsbEject
                 {
                     if (!Native.DeviceIoControl(hFile, Native.IOCTL_STORAGE_GET_DEVICE_NUMBER, IntPtr.Zero, 0, buffer, size, out bytesReturned, IntPtr.Zero))
                     {
-                        Logger.Log(LogLevel.Warning, "IOCTL failed.");
+                        // TODO
                     }
                 }
                 catch (Exception ex)
                 {
-                    Logger.Log(LogLevel.Error, "Exception calling IOCTL: {0}", ex);
+                    // TODO
                 }
 
                 if (bytesReturned > 0)

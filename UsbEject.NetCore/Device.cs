@@ -1,8 +1,3 @@
-// UsbEject version 2.0 May 2017
-// written by Simon Mourier <email: simon [underscore] mourier [at] hotmail [dot] com>
-// updated by Dmitry Shechtman
-
-using Chimp.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,7 +20,7 @@ namespace UsbEject
     {
 #region Constructors
 
-        internal Device(DeviceClass deviceClass, Native.SP_DEVINFO_DATA deviceInfoData, string path, int index, ILogger logger)
+        internal Device(DeviceClass deviceClass, Native.SP_DEVINFO_DATA deviceInfoData, string path, int index)
         {
             if (deviceClass == null)
                 throw new ArgumentNullException(nameof(deviceClass));
@@ -37,8 +32,7 @@ namespace UsbEject
             DeviceInfoData = deviceInfoData;
             Path = path; // may be null
             Index = index;
-            Logger = logger;
-
+            
             _class = new Lazy<string>(GetClass);
             _classGuid = new Lazy<string>(GetClassGuid);
             _description = new Lazy<string>(GetDescription);
@@ -84,13 +78,6 @@ namespace UsbEject
         /// Gets the device's path.
         /// </summary>
         public string Path
-        {
-            get;
-        }
-#endregion
-
-#region Logger
-        internal ILogger Logger
         {
             get;
         }
@@ -256,7 +243,7 @@ namespace UsbEject
             if (hr == 0)
             {
                 Native.SP_DEVINFO_DATA info = DeviceClass.GetInfo(parentDevInst);
-                return new Device(DeviceClass, info, null, -1, Logger);
+                return new Device(DeviceClass, info, null, -1);
             }
 
             return null;
@@ -323,7 +310,7 @@ namespace UsbEject
                     Exception ex = Marshal.GetExceptionForHR(hr);
                     if (ex != null)
                     {
-                        Logger.Log(LogLevel.Error, "Error ejecting {0}: {1}", device.InstanceHandle, ex);
+                       
                         // don't throw exceptions, there should be a UI for this
                     }
                 }
@@ -342,17 +329,12 @@ namespace UsbEject
                     Exception ex = Marshal.GetExceptionForHR(hr);
                     if (ex != null)
                     {
-                        Logger.Log(LogLevel.Error, "Error ejecting {0}: {1}", device.InstanceHandle, ex);
                         throw ex;
                     }
                 }
 
                 if (veto != Native.PNP_VETO_TYPE.Ok)
                 {
-                    if (sb.Length > 0)
-                        Logger.Log(LogLevel.Warning, "Vetoed ejecting {0}: {1} (2)", device.InstanceHandle, veto, sb.ToString());
-                    else
-                        Logger.Log(LogLevel.Warning, "Vetoed ejecting {0}: {1}", device.InstanceHandle, veto);
                     return veto.ToString();
                 }
             }

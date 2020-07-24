@@ -2,10 +2,21 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Jarred Capellman, Simon Mourier, Dmitry Shechtman</Authors>
+    <Company />
+    <Description>.NET Core 3.1 port of UsbEject</Description>
+    <PackageTags>usb eject usbeject</PackageTags>
+    <RepositoryUrl>https://github.com/jcapellman/usbeject</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/jcapellman/usbeject</PackageProjectUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Chimp.Logging.Core" Version="0.2.0-alpha" />
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

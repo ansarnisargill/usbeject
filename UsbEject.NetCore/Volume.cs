@@ -1,8 +1,3 @@
-// UsbEject version 2.0 May 2017
-// written by Simon Mourier <email: simon [underscore] mourier [at] hotmail [dot] com>
-// updated by Dmitry Shechtman
-
-using Chimp.Logging;
 using Microsoft.Win32.SafeHandles;
 using System;
 using System.Collections.Generic;
@@ -26,8 +21,8 @@ namespace UsbEject
     {
         #region Constructors
 
-        internal Volume(DeviceClass deviceClass, Native.SP_DEVINFO_DATA deviceInfoData, string path, int index, ILogger logger)
-            : base(deviceClass, deviceInfoData, path, index, logger)
+        internal Volume(DeviceClass deviceClass, Native.SP_DEVINFO_DATA deviceInfoData, string path, int index)
+            : base(deviceClass, deviceInfoData, path, index)
         {
             _volumeName = new Lazy<string>(GetVolumeName);
             _logicalDrive = new Lazy<string>(GetLogicalDrive);
@@ -57,8 +52,7 @@ namespace UsbEject
             if (!Native.GetVolumeNameForVolumeMountPoint(Path + "\\", sb, sb.Capacity))
             {
                 Exception ex = Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error());
-                Logger.Log(LogLevel.Error, ex);
-                //throw ex;
+                throw ex;
             }
 
             if (sb.Length > 0)
@@ -117,7 +111,7 @@ namespace UsbEject
 
             if (DiskNumbers != null)
             {
-                DiskDeviceClass diskClass = new DiskDeviceClass(Logger);
+                DiskDeviceClass diskClass = new DiskDeviceClass();
                 foreach (int index in DiskNumbers)
                 {
                     foreach (Disk disk in diskClass)
@@ -153,12 +147,12 @@ namespace UsbEject
             List<int> numbers = new List<int>();
             if (LogicalDrive != null)
             {
-                Logger.Log(LogLevel.Trace, "Finding disk extents for volume: {0}", LogicalDrive);
+                
                 SafeFileHandle hFile = Native.CreateFile(@"\\.\" + LogicalDrive, 0, Native.FILE_SHARE_READ | Native.FILE_SHARE_WRITE, IntPtr.Zero, Native.OPEN_EXISTING, 0, IntPtr.Zero);
                 if (hFile.IsInvalid)
                 {
                     Exception ex = Marshal.GetExceptionForHR(Marshal.GetHRForLastWin32Error());
-                    Logger.Log(LogLevel.Error, ex);
+                   
                     throw ex;
                 }
 
@@ -173,12 +167,10 @@ namespace UsbEject
                         {
                             if (!Native.DeviceIoControl(hFile, Native.IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS, IntPtr.Zero, 0, buffer, size, out bytesReturned, IntPtr.Zero))
                             {
-                                Logger.Log(LogLevel.Warning, "IOCTL failed.");
                             }
                         }
                         catch (Exception ex)
                         {
-                            Logger.Log(LogLevel.Error, "Exception calling IOCTL: {0}", ex);
                         }
 
                         if (bytesReturned > 0)

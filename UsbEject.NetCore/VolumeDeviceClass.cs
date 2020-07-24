@@ -1,8 +1,3 @@
-// UsbEject version 2.0 May 2017
-// written by Simon Mourier <email: simon [underscore] mourier [at] hotmail [dot] com>
-// updated by Dmitry Shechtman
-
-using Chimp.Logging;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,25 +18,8 @@ namespace UsbEject
     {
         #region Constructors
 
-        /// <summary>
-        /// Initializes a new instance of the VolumeDeviceClass class.
-        /// </summary>
-        public VolumeDeviceClass()
-            : this(NoOpLoggerFactory.Instance)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the VolumeDeviceClass class.
-        /// </summary>
-        /// <param name="loggerFactory">Logger factory.</param>
-        public VolumeDeviceClass(ILoggerFactory loggerFactory)
-            : this(loggerFactory.CreateLogger<VolumeDeviceClass>())
-        {
-        }
-
-        internal VolumeDeviceClass(ILogger logger)
-            : base(Native.GUID_DEVINTERFACE_VOLUME, logger)
+        internal VolumeDeviceClass()
+            : base(Native.GUID_DEVINTERFACE_VOLUME)
         {
             _logicalDrives = new Lazy<IDictionary<string, string>>(GetLogicalDrives);
             _volumes = new Lazy<VolumeCollection>(GetVolumes);
@@ -53,7 +31,7 @@ namespace UsbEject
 
         internal override Device CreateDevice(Native.SP_DEVINFO_DATA deviceInfoData, string path, int index)
         {
-            return new Volume(this, deviceInfoData, path, index, Logger);
+            return new Volume(this, deviceInfoData, path, index);
         }
 
         #endregion
@@ -80,7 +58,6 @@ namespace UsbEject
                 {
                     string volumeName = sb.ToString();
                     logicalDrives.Add(volumeName, drive.Replace("\\", ""));
-                    Logger.Log(LogLevel.Trace, "{0} ==> {1}", drive, volumeName);
                 }
             }
 

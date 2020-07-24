@@ -1,8 +1,3 @@
-// UsbEject version 2.0 May 2017
-// written by Simon Mourier <email: simon [underscore] mourier [at] hotmail [dot] com>
-// updated by Dmitry Shechtman
-
-using Chimp.Logging;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,25 +17,8 @@ namespace UsbEject
     {
         #region Constructors
 
-        /// <summary>
-        /// Initializes a new instance of the DiskDeviceClass class.
-        /// </summary>
-        public DiskDeviceClass()
-            : this(NoOpLoggerFactory.Instance)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the DiskDeviceClass class.
-        /// </summary>
-        /// <param name="loggerFactory">Logger factory.</param>
-        public DiskDeviceClass(ILoggerFactory loggerFactory)
-            : this(loggerFactory.CreateLogger<DiskDeviceClass>())
-        {
-        }
-
-        internal DiskDeviceClass(ILogger logger)
-            : base(Native.GUID_DEVINTERFACE_DISK, logger)
+        internal DiskDeviceClass()
+            : base(Native.GUID_DEVINTERFACE_DISK)
         {
             _disks = new Lazy<DiskCollection>(GetDisks);
         }
@@ -51,7 +29,7 @@ namespace UsbEject
 
         internal override Device CreateDevice(Native.SP_DEVINFO_DATA deviceInfoData, string path, int index)
         {
-            return new Disk(this, deviceInfoData, path, index, Logger);
+            return new Disk(this, deviceInfoData, path, index);
         }
 
         #endregion
