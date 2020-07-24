@@ -1,58 +1,31 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30317.65
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "UsbEject", "UsbEject\UsbEject.shproj", "{C2246CDE-CA85-42F5-A139-BE4ED68DF978}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net45", "Net45\Net45.csproj", "{BA1DCACB-99B3-49DB-9A06-A641205D25E6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net20", "Net20\Net20.csproj", "{430DF142-BE3C-4167-A10E-CD488AFF1FE8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net35", "Net35\Net35.csproj", "{03345201-6908-4FDE-9867-A20F8A461A7F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Net40", "Net40\Net40.csproj", "{FFA0ABFC-24FE-4C9A-A5EF-35D783291AE6}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3FD79D2E-99C3-4E8B-A14D-320FAF056F05}"
 	ProjectSection(SolutionItems) = preProject
 		README.txt = README.txt
 		UsbEject.nuspec = UsbEject.nuspec
 	EndProjectSection
 EndProject
-Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "Documentation", "Documentation\Documentation.shfbproj", "{8FAE7A03-01E2-4AC6-B8EB-EA28ACA868AC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsbEject.NetCore", "UsbEject.NetCore\UsbEject.NetCore.csproj", "{3EF0076A-26B0-4482-A1C2-4315BD39F12D}"
 EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		UsbEject\UsbEject.projitems*{03345201-6908-4fde-9867-a20f8a461a7f}*SharedItemsImports = 4
-		UsbEject\UsbEject.projitems*{430df142-be3c-4167-a10e-cd488aff1fe8}*SharedItemsImports = 4
-		UsbEject\UsbEject.projitems*{ba1dcacb-99b3-49db-9a06-a641205d25e6}*SharedItemsImports = 4
-		UsbEject\UsbEject.projitems*{ffa0abfc-24fe-4c9a-a5ef-35d783291ae6}*SharedItemsImports = 4
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BA1DCACB-99B3-49DB-9A06-A641205D25E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BA1DCACB-99B3-49DB-9A06-A641205D25E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BA1DCACB-99B3-49DB-9A06-A641205D25E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BA1DCACB-99B3-49DB-9A06-A641205D25E6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{430DF142-BE3C-4167-A10E-CD488AFF1FE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{430DF142-BE3C-4167-A10E-CD488AFF1FE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{430DF142-BE3C-4167-A10E-CD488AFF1FE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{430DF142-BE3C-4167-A10E-CD488AFF1FE8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{03345201-6908-4FDE-9867-A20F8A461A7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{03345201-6908-4FDE-9867-A20F8A461A7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{03345201-6908-4FDE-9867-A20F8A461A7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{03345201-6908-4FDE-9867-A20F8A461A7F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FFA0ABFC-24FE-4C9A-A5EF-35D783291AE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FFA0ABFC-24FE-4C9A-A5EF-35D783291AE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FFA0ABFC-24FE-4C9A-A5EF-35D783291AE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FFA0ABFC-24FE-4C9A-A5EF-35D783291AE6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8FAE7A03-01E2-4AC6-B8EB-EA28ACA868AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8FAE7A03-01E2-4AC6-B8EB-EA28ACA868AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EF0076A-26B0-4482-A1C2-4315BD39F12D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EF0076A-26B0-4482-A1C2-4315BD39F12D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EF0076A-26B0-4482-A1C2-4315BD39F12D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EF0076A-26B0-4482-A1C2-4315BD39F12D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C9CEEC16-1D38-41CB-B177-3AED6BD39147}
 	EndGlobalSection
 EndGlobal

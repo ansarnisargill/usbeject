@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Topics>
-  <Topic id="e37d3f20-c770-44bf-ba4a-08ee59b06bff" visible="True" isDefault="true" isSelected="true" title="Welcome to UsbEject" tocTitle="Welcome">
-    <HelpKeywords>
-      <HelpKeyword index="K" term="Welcome" />
-    </HelpKeywords>
-  </Topic>
-</Topics>
