@@ -10,6 +10,9 @@
     <RepositoryUrl>https://github.com/jcapellman/usbeject</RepositoryUrl>
     <PackageProjectUrl>https://github.com/jcapellman/usbeject</PackageProjectUrl>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageId>UsbEject.NetCore</PackageId>
+    <Product>UsbEject.NetCore</Product>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

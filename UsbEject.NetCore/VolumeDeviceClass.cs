@@ -3,11 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-#if NET45
-using VolumeCollection = System.Collections.Generic.IReadOnlyCollection<UsbEject.Volume>;
-#else
 using VolumeCollection = System.Collections.Generic.IEnumerable<UsbEject.Volume>;
-#endif
 
 namespace UsbEject
 {
@@ -18,7 +14,7 @@ namespace UsbEject
     {
         #region Constructors
 
-        internal VolumeDeviceClass()
+        public VolumeDeviceClass()
             : base(Native.GUID_DEVINTERFACE_VOLUME)
         {
             _logicalDrives = new Lazy<IDictionary<string, string>>(GetLogicalDrives);
